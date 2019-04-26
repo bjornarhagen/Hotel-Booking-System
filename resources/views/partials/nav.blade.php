@@ -13,7 +13,10 @@
         @endguest
         @auth
             <div class="nav-left">
-                <a href="{{ route('site.index') }}">{{ config('app.name') }}</a>
+                <a href="{{ route('site.index') }}">
+                    <img src="{{ config('app.logo') }}" alt="{{ config('app.name') }} logo">
+                    <span>{{ config('app.name') }}</span>
+                </a>
             </div>
             <div class="nav-right">
                 <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
