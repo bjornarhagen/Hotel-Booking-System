@@ -37,4 +37,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Checks if the password is correct
+     *
+     * @param String $password
+     * @return boolean
+     */
+    public function check_password(String $password): bool
+    {
+        return Auth::attempt(['email' => $this->email, 'password' => $password]);
+    }
 }
