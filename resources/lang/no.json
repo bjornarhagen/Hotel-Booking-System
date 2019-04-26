@@ -1,0 +1,32 @@
+{
+    "Verify Your Email Address": "Bekreft e-postadressen din",
+    "Your email is now verified": "Din e-post er nå verifisert",
+    "click here to request another": "klikk her for å få en til",
+    "If you did not receive the email": "Hvis du ikke mottok eposten",
+    "Your email was correctly verified": "E-posten din ble korrekt verifisert",
+    "A fresh verification link has been sent to your email address.": "En ny bekreftelseslink er sendt til din e-postadresse.",
+    "Before proceeding, please check your email for a verification link.": "Før du fortsetter, vennligst sjekk e-posten din for en bekreftelseslink.",
+
+    "Name": "Navn",
+    "E-Mail Address": "E-postadresse",
+    "Remember Me": "Husk meg",
+    "Password": "Passord",
+    "Confirm Password": "Bekreft passord",
+    "New password": "Nytt passord",
+    "Confirm new password": "Bekreft nytt passord",
+    "Current password": "Nåværende passord",
+    "Change password": "Bytt passord",
+    "Reset Password": "Tilbakestill passord",
+    "Forgot Your Password?": "Glemt passordet?",
+    "Send Password Reset Link": "Send passord tilbakestilling lenke",
+    "Confirm your identity": "Bekreft din identitet",
+    "In order to save your changes, we need you to confirm your identity by writing your current password.": "For å lagre endringene, må vi bekrefte identiteten ved at du skriver inn ditt nåværende passord.",
+
+    "User": "Bruker",
+    "User info": "Brukerinfo",
+    "Dashboard": "Kontrollpanel",
+
+    "Login": "Logg inn",
+    "Logout": "Logg ut",
+    "Register": "Registrer"
+}
