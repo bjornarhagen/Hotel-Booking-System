@@ -13,11 +13,11 @@
             <span>|</span>
             <a href="{{ route('user.show') }}">{{ __('My profile') }}</a>
         </p>
-    <p class="copyright">
-        <a href="https://github.com/bjornarhagen/Hotel-Booking-System" noopener noreferrer target="_blank">{{ config('app.name') }}</a>
-        <span>—</span>
-        <span>A school project by</span>
-        <a href="https://bjornar.dev" noopener noreferrer target="_blank">Bjørnar Hagen</a>
-    </p>
+        <p class="copyright">
+            <a href="https://github.com/bjornarhagen/Hotel-Booking-System" noopener noreferrer target="_blank">{{ config('app.name') }}</a>
+            <span>—</span>
+            <span>{{ __('A project by') }}</span>
+            <a href="https://bjornar.dev" noopener noreferrer target="_blank">Bjørnar Hagen</a>
+        </p>
     </div>
 </footer>
