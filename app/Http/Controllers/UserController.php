@@ -48,10 +48,11 @@ class UserController extends Controller
     {
         $user = $request->user();
         $session = $request->session();
+        $simple_changes = false;
 
-        if ($user->check_password($request->current_password)) {
-
-            if ($request->filled('email') && $request->email != $user->email) {
+        // Update email
+        if ($request->filled('email') && $request->email != $user->email) {
+            if ($user->check_password($request->current_password)) {
                 $this->update_email_validator($request->all())->validate();
 
                 $user->email = $request->email;
@@ -61,28 +62,39 @@ class UserController extends Controller
 
                 $session->flash('success', 'Din kontos e-post adresse ble oppdatert.');
                 $session->flash('info', 'Du må bekrefte din nye e-post. En lenke har blitt sendt til deg.');
+            } else {
+                $session->flash('error', 'Feil passord');
             }
+        }
 
-            if ($request->filled('new_password')) {
+        // Update password
+        if ($request->filled('new_password')) {
+            if ($user->check_password($request->current_password)) {
                 $this->update_password_validator($request->all())->validate();
 
                 $user->password = Hash::make($request->new_password);
                 $user->save();
-
+    
                 $session->flash('success', 'Din kontos passord ble oppdatert.');
+            } else {
+                $session->flash('error', 'Feil passord');
+            }
+        }
+
+        // Update name
+        if ($request->filled('name') && $request->name != $user->name) {
+            $this->update_info_validator($request->all())->validate();
+
+            $user->name = $request->name;
+            $user->save();
+
+            $simple_changes = true;
+        }
+
             }
 
-            if ($request->filled('name') && $request->name != $user->name) {
-                $this->update_info_validator($request->all())->validate();
-
-                $user->name = $request->name;
-                $user->save();
-
-                $session->flash('success', 'Din konto ble oppdatert.');
-            }
-
-        } else {
-            $session->flash('error', 'Feil passord');
+        if ($simple_changes) {
+            $session->flash('success', 'Din konto ble oppdatert.');
         }
 
         return redirect()->route('user.show');

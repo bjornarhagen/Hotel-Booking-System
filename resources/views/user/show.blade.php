@@ -28,18 +28,18 @@
             <input id="user-update-form-password-confirm" type="password" name="new_password_confirmation">
         </div>
     </fieldset>
-    <fieldset>
+    <fieldset class="hidden">
         <legend>{{ __('Confirm your identity') }}</legend>
         <p>{{ __('In order to save your changes, we need you to confirm your identity by writing your current password.') }}</p>
 
         <div class="form-group">
             <label for="user-update-form-password-current">{{ __('Current password') }}</label>
-            <input id="user-update-form-password-current" type="password" name="current_password" required>
-        </div>
-
-        <div class="form-group">
-            <button type="submit">{{ __('Save') }}</button>
+            <input id="user-update-form-password-current" type="password" name="current_password">
         </div>
     </fieldset>
+    <div class="form-group">
+        <button type="submit">{{ __('Save') }}</button>
+    </div>
 </form>
+<script src="{{ asset('js/user.js') }}"></script>
 @endsection
