@@ -20,8 +20,13 @@
             </div>
             <div class="nav-right">
                 <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+
+                @php
+                    $nav_user = Auth::user();
+                @endphp
                 <a href="{{ route('user.show') }}">
-                    {{ Auth::user()->name }}
+                    <img src="{{ $nav_user->image->url }}" alt="{{ __(':name profile picture', ['name' => $nav_user->name]) }}">
+                    <span>{{ $nav_user->name }}</span>
                 </a>
 
                 @role('admin')

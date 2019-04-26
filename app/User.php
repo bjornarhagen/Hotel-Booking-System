@@ -49,4 +49,11 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Auth::attempt(['email' => $this->email, 'password' => $password]);
     }
+
+    public function image()
+    {
+        return $this->hasOne('App\Image', 'id', 'image_id')->withDefault(function ($image) {
+            $image->url = config('app.user.default_image');
+        });
+    }
 }

@@ -1,9 +1,12 @@
 @extends('partials.master')
 
 @section('content')
-<h1>{{ __('User') }} — {{ $user->name }}</h1>
+<div>
+    <h1>{{ __('User') }} — {{ $user->name }}</h1>
+    <img src="{{ $user->image->url }}" alt="{{ __(':name profile picture', ['name' => $user->name]) }}">
+</div>
 
-<form action="{{ route('user.update') }}" method="post">
+<form action="{{ route('user.update') }}" method="post" enctype=multipart/form-data>
     @csrf
 
     <fieldset>
@@ -15,6 +18,16 @@
         <div class="form-group">
             <label for="user-update-form-email">{{ __('Email') }}</label>
             <input id="user-update-form-email" type="email" name="email" value="{{ $user->email }}">
+        </div>
+        <div class="form-group">
+            @if ($user->image_id !== null)
+                <label for="user-update-form-image-remove" class="button">{{ __('Remove current image') }}</label>
+                <input id="user-update-form-image-remove" type="checkbox" name="image_remove">
+            @endif
+        </div>
+        <div class="form-group">
+            <label for="user-update-form-image">{{ __('Image') }}</label>
+            <input id="user-update-form-image" type="file" name="image" value="{{ old('image') }}">
         </div>
     </fieldset>
     <fieldset>

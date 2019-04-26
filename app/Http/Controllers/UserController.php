@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
+use App\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
-use Auth;
 
 class UserController extends Controller
 {
@@ -41,6 +41,19 @@ class UserController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255']
+        ]);
+    }
+
+    protected function update_image_validator(array $data)
+    {
+        return Validator::make($data, [
+            'image' => ['required', 'image', 'max:2000']
+        ]);
+    }
+    protected function remove_image_validator(array $data)
+    {
+        return Validator::make($data, [
+            'image_remove' => ['required', 'accepted']
         ]);
     }
 
@@ -91,7 +104,31 @@ class UserController extends Controller
             $simple_changes = true;
         }
 
+        // Remove image
+        if ($request->has('image_remove')) {
+            $this->remove_image_validator($request->all())->validate();
+
+            $user->image_id = null;
+            $user->save();
+
+            $simple_changes = true;
+        }
+
+        // Update image
+        if ($request->has('image')) {
+            $this->update_image_validator($request->all())->validate();
+
+            $image = Image::upload($user, $request->file('image'), 'profiles');
+
+            if ($image === null) {
+                $session->flash('error', 'Noe gikk galt. Vi kunne ikke laste opp bilde ditt.');
+            } else {
+                $user->image_id = $image->id;
+                $user->save();
+
+                $simple_changes = true;
             }
+        }
 
         if ($simple_changes) {
             $session->flash('success', 'Din konto ble oppdatert.');
