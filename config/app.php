@@ -80,7 +80,9 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('APP_LOCALE', 'no'),
+
+    'time_locale' => env('APP_LOCALE_TIME', 'C'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => env('APP_LOCALE_FALLBACK', 'en'),
 
     /*
     |--------------------------------------------------------------------------
