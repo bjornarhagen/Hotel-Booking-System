@@ -20,6 +20,10 @@
                 <a href="{{ route('user.show') }}">
                     {{ Auth::user()->name }}
                 </a>
+
+                @role('admin')
+                    <a href="#admin">Admin</a>
+                @endrole
                 <a
                     href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
