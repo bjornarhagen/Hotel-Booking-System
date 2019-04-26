@@ -15,12 +15,23 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name_prefix')->nullable()->default(null);
+            $table->string('name_first');
+            $table->string('name_last');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->bigInteger('image_id')->unsigned()->nullable()->default(null);
+            $table->foreign('image_id')->references('id')->on('images')->onDelete('set null');
+            
             $table->rememberToken();
+            $table->timestamp('email_verified_at')->nullable()->default(null);
+            $table->datetime('login_last')->nullable()->default(null);
             $table->timestamps();
+        });
+
+        Schema::table('images', function (Blueprint $table) {
+            $table->bigInteger('user_id')->unsigned()->nullable()->default(null);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 
@@ -31,6 +42,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::table('images', function (Blueprint $table) {
+            $table->dropColumn('user_id');
+        });
+
         Schema::dropIfExists('users');
     }
 }

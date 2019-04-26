@@ -56,4 +56,15 @@ class User extends Authenticatable implements MustVerifyEmail
             $image->url = config('app.user.default_image');
         });
     }
+
+    public function getNameAttribute()
+    {
+        $name = $this->name_first . ' ' . $this->name_last;
+
+        if ($this->name_prefix === null) {
+            $name = $this->name_prefix . ' ' . $name;
+        }
+
+        return $name;
+    }
 }

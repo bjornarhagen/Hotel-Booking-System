@@ -40,7 +40,9 @@ class UserController extends Controller
     protected function update_info_validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255']
+            'name_prefix' => ['nullable', 'string', 'max:20'],
+            'name_first' => ['required', 'string', 'max:255'],
+            'name_last' => ['required', 'string', 'max:255']
         ]);
     }
 
@@ -95,13 +97,16 @@ class UserController extends Controller
         }
 
         // Update name
-        if ($request->filled('name') && $request->name != $user->name) {
+        if ($request->filled('name_first')) {
             $this->update_info_validator($request->all())->validate();
 
-            $user->name = $request->name;
-            $user->save();
-
-            $simple_changes = true;
+            $user->name_prefix = $request->name_prefix;
+            $user->name_first = $request->name_first;
+            $user->name_last = $request->name_last;
+            
+            if ($user->save()) {
+                $simple_changes = true;
+            }
         }
 
         // Remove image

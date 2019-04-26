@@ -21,7 +21,8 @@ class UsersTableSeeder extends Seeder
 
         // Create a superadmin user
         $user = new User;
-        $user->name = 'Superadmin bruker';
+        $user->name_first = 'Superadmin';
+        $user->name_last = 'bruker';
         $user->email = 'superadmin@example.com';
         $user->password = $password;
         $user->email_verified_at = Carbon::now();
@@ -35,7 +36,8 @@ class UsersTableSeeder extends Seeder
         
         // Create an admin user
         $user = new User;
-        $user->name = 'Admin bruker';
+        $user->name_first = 'Admin';
+        $user->name_last = 'bruker';
         $user->email = 'admin@example.com';
         $user->password = $password;
         $user->email_verified_at = Carbon::now();
@@ -48,7 +50,8 @@ class UsersTableSeeder extends Seeder
         
         // Create a regular user
         $user = new User;
-        $user->name = 'Vanlig bruker';
+        $user->name_first = 'Vanlig';
+        $user->name_last = 'bruker';
         $user->email = 'user@example.com';
         $user->password = $password;
         $user->email_verified_at = Carbon::now();

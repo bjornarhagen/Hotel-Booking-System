@@ -25,8 +25,8 @@
                     $nav_user = Auth::user();
                 @endphp
                 <a href="{{ route('user.show') }}">
-                    <img src="{{ $nav_user->image->url }}" alt="{{ __(':name profile picture', ['name' => $nav_user->name]) }}">
-                    <span>{{ $nav_user->name }}</span>
+                    <img src="{{ $nav_user->image->url }}" alt="{{ __(':name profile picture', ['name' => $nav_user->name_first]) }}">
+                    <span>{{ $nav_user->name_first }}</span>
                 </a>
 
                 @role('admin')

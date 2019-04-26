@@ -3,7 +3,7 @@
 @section('content')
 <div>
     <h1>{{ __('User') }} — {{ $user->name }}</h1>
-    <img src="{{ $user->image->url }}" alt="{{ __(':name profile picture', ['name' => $user->name]) }}">
+    <img src="{{ $user->image->url }}" alt="{{ __(':name profile picture', ['name' => $user->name_first]) }}">
 </div>
 
 <form action="{{ route('user.update') }}" method="post" enctype=multipart/form-data>
@@ -12,12 +12,46 @@
     <fieldset>
         <legend>{{ __('User info') }}</legend>
         <div class="form-group">
-            <label for="user-update-form-name">{{ __('Name') }}</label>
-            <input id="user-update-form-name" type="text" name="name" value="{{ $user->name }}">
+            <label for="user-update-form-name_prefix">{{ __('Prefix') }}</label>
+            <input id="user-update-form-name_prefix" list="user-update-form-name_prefix-list" type="text" name="name_prefix" value="{{ $user->name_prefix }}">
+            <datalist id="user-update-form-name_prefix-list">
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Ms">Ms</option>
+                <option value="Prof">Prof</option>
+                <option value="Dr">Dr</option>
+                <option value="Lord">Lord</option>
+                <option value="Sir">Sir</option>
+                <option value="1st Lt">1st Lt</option>
+                <option value="Adm">Adm</option>
+                <option value="Atty">Atty</option>
+                <option value="Brother">Brother</option>
+                <option value="Capt">Capt</option>
+                <option value="Chief">Chief</option>
+                <option value="Cmdr">Cmdr</option>
+                <option value="Col">Col</option>
+                <option value="Dean">Dean</option>
+                <option value="Elder">Elder</option>
+                <option value="Father">Father</option>
+                <option value="Gov">Gov</option>
+                <option value="Hon">Hon</option>
+                <option value="Lt Col">Lt Col</option>
+                <option value="MSgt">MSgt</option>
+                <option value="Prince">Prince</option>
+                <option value="Sister">Sister</option>
+            </datalist>
+        </div>
+        <div class="form-group">
+            <label for="user-update-form-name_first">{{ __('First name') }}</label>
+            <input id="user-update-form-name_first" type="text" name="name_first" value="{{ $user->name_first }}" required>
+        </div>
+        <div class="form-group">
+            <label for="user-update-form-name_last">{{ __('Last name') }}</label>
+            <input id="user-update-form-name_last" type="text" name="name_last" value="{{ $user->name_last }}" required>
         </div>
         <div class="form-group">
             <label for="user-update-form-email">{{ __('Email') }}</label>
-            <input id="user-update-form-email" type="email" name="email" value="{{ $user->email }}">
+            <input id="user-update-form-email" type="email" name="email" value="{{ $user->email }}" required>
         </div>
         <div class="form-group">
             @if ($user->image_id !== null)
