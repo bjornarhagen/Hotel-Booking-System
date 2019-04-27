@@ -71,6 +71,27 @@ class User extends Authenticatable implements MustVerifyEmail
         return $name;
     }
 
+    // Get all hotels the user has access to (either as an employee or manager)
+    public function getHotelsAttribute()
+    {
+        $hotel_users = HotelUser::where([
+            'user_id' => $this->id
+        ])->pluck('hotel_id')->toArray();
+
+        if (count($hotel_users) === 0) {
+            return [];
+        }
+
+        return Hotel::whereIn('id', $hotel_users)->get();
+    }
+
+    // Check wether or not this user is only a guest.
+    // Meaning the user doesn't have an employee or manager role at any hotel.
+    public function isOnlyGuest()
+    {
+        return $this->hotels === [];
+    }
+
     public function hasRoleAtHotel(Hotel $hotel, Role $role) : bool
     {
         $hotel_user = HotelUser::where([

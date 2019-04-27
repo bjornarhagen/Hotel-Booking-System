@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bootSetTimeLocale();
         $this->bootBladeHotelRole();
+        $this->bootBladeHotelGuest();
     }
     
     private function bootSetTimeLocale()
@@ -49,6 +50,14 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return $user->hasRoleAtHotel($hotel, $role);
+        });
+    }
+
+    private function bootBladeHotelGuest()
+    {
+        Blade::if('hotel_guest', function () {
+            $user = Auth::user();
+            return $user->isOnlyGuest();
         });
     }
 }
