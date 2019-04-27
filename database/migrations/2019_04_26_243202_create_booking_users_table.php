@@ -19,7 +19,7 @@ class CreateBookingUsersTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('room_id')->unsigned();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('restrict');
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
             $table->boolean('is_main_booker')->default(false);
             $table->boolean('meal_breakfast')->default(false);
             $table->boolean('meal_lunch')->default(false);
