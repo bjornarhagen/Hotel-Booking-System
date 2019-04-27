@@ -49,7 +49,7 @@ class UserController extends Controller
     protected function update_image_validator(array $data)
     {
         return Validator::make($data, [
-            'image' => ['required', 'image', 'max:2000']
+            'image' => ['required', 'image', 'dimensions:max_width=1024,max_height=1024', 'max:2000']
         ]);
     }
     protected function remove_image_validator(array $data)
