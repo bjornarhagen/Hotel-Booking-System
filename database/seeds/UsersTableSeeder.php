@@ -21,44 +21,35 @@ class UsersTableSeeder extends Seeder
 
         // Create a superadmin user
         $user = new User;
-        $user->name_first = 'Superadmin';
-        $user->name_last = 'bruker';
-        $user->email = 'superadmin@example.com';
-        $user->password = $password;
-        $user->email_verified_at = Carbon::now();
-        $user->remember_token = Str::random(10);
-        $user->save();
-
-        $user->assignRole('superadmin');
-        $user->assignRole('admin');
-        $user->assignRole('user');
-        $user->save();
-        
-        // Create an admin user
-        $user = new User;
         $user->name_first = 'Admin';
-        $user->name_last = 'bruker';
+        $user->name_last = 'user';
         $user->email = 'admin@example.com';
         $user->password = $password;
         $user->email_verified_at = Carbon::now();
         $user->remember_token = Str::random(10);
         $user->save();
-        
-        $user->assignRole('admin');
-        $user->assignRole('user');
+
+        // Create an admin user
+        $user = new User;
+        $user->name_first = 'Hotel';
+        $user->name_last = 'manager';
+        $user->email = 'hm@example.com';
+        $user->password = $password;
+        $user->email_verified_at = Carbon::now();
+        $user->remember_token = Str::random(10);
         $user->save();
         
         // Create a regular user
         $user = new User;
-        $user->name_first = 'Vanlig';
-        $user->name_last = 'bruker';
-        $user->email = 'user@example.com';
+        $user->name_first = 'Hotel';
+        $user->name_last = 'employee';
+        $user->email = 'he@example.com';
         $user->password = $password;
         $user->email_verified_at = Carbon::now();
         $user->remember_token = Str::random(10);
         $user->save();
 
-        $user->assignRole('user');
-        $user->save();
+
+
     }
 }
