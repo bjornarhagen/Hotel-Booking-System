@@ -29,9 +29,16 @@
                     <span>{{ $nav_user->name_first }}</span>
                 </a>
 
-                @role('admin')
-                    <a href="#admin">Admin</a>
-                @endrole
+                @hotel_guest
+                    <div>
+                        <a href="#">Mine ordre</a>
+                    </div>
+                @else
+                    <div>
+                        <a href="{{ route('admin.hotel.index') }}">Mine hotell</a>
+                    </div>
+                @endhotel_guest
+
                 <a
                     href="{{ route('logout') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -45,3 +52,4 @@
         @endauth
     </div>
 </nav>
+<hr>

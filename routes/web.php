@@ -19,4 +19,23 @@ Route::get('epost-bekreftet', 'Auth\VerificationController@complete');
 Route::get('konto', 'UserController@show')->name('user.show');
 Route::post('konto', 'UserController@update')->name('user.update');
 
-Route::get('kontrollpanel', 'DashboardController@index')->name('dashboard.index');
+
+Route::prefix('kontrollpanel')->group(function () {
+    Route::get('/', 'DashboardController@index')->name('dashboard.index');
+    
+    Route::prefix('admin')->group(function () {
+        Route::prefix('hoteller')->group(function () {
+            Route::get('/', 'HotelController@index')->name('admin.hotel.index');
+            Route::get('ny', 'HotelController@create')->name('admin.hotel.create');
+            Route::post('lagre', 'HotelController@store')->name('admin.hotel.store');
+            Route::get('{hotel}/rediger', 'HotelController@edit')->name('admin.hotel.edit');
+            Route::patch('{hotel}/oppdater', 'HotelController@update')->name('admin.hotel.update');
+            Route::get('{hotel}/fjern', 'HotelController@delete')->name('admin.hotel.delete');
+            Route::delete('{hotel}/slett', 'HotelController@destroy')->name('admin.hotel.destroy');
+        });
+    });
+});
+
+Route::prefix('hoteller')->group(function () {
+    Route::get('{hotel_slug}', 'HotelController@show')->name('hotel.show');
+});
