@@ -202,6 +202,8 @@ class HotelController extends Controller
         }
 
         $this->hotel_validator_post($request->all(), $hotel->id)->validate();
+
+        $user = $request->user();
         
         $hotel->name = $request->name;
         $hotel->slug = $request->slug;
