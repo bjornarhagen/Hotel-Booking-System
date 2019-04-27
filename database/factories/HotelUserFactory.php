@@ -29,6 +29,6 @@ $factory->define(HotelUser::class, function (Faker $faker) {
     return [
         'hotel_id' => $hotel->id,
         'user_id' => $user->id,
-        'roles_id' => $role->id,
+        'role_id' => $role->id,
     ];
 });

@@ -18,8 +18,8 @@ class CreateHotelUsersTable extends Migration
             $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->tinyInteger('roles_id')->unsigned();
-            $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->tinyInteger('role_id')->unsigned();
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
 
             $table->primary(['hotel_id', 'user_id']);
         });
