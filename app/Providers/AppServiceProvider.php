@@ -40,8 +40,8 @@ class AppServiceProvider extends ServiceProvider
     
     private function bootBladeHotelRole()
     {
-        $user = Auth::user();
         Blade::if('hotel_role', function (Hotel $hotel, String $role) {
+            $user = Auth::user();
             $role = Role::where('slug', $role)->first();
             
             if ($role === null) {

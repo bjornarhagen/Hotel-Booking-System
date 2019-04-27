@@ -79,6 +79,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'role_id' => $role->id,
         ])->get();
 
-        return $hotel_user !== null;
+        return $hotel_user->count() !== 0;
     }
 }
