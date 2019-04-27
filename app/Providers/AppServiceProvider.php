@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use \Blade;
+use Auth;
+use Blade;
 use App\Role;
 use App\Hotel;
 use Carbon\Carbon;
