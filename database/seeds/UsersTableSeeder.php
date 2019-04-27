@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-
-use Carbon\Carbon;
-
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,40 +15,15 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // A hash of "password".
-        $password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
-
-        // Create a superadmin user
         $user = new User;
-        $user->name_first = 'Admin';
-        $user->name_last = 'user';
+        $user->name_first = 'Example';
+        $user->name_last = 'User';
         $user->email = 'admin@example.com';
-        $user->password = $password;
+        $user->password = Hash::make('password');
         $user->email_verified_at = Carbon::now();
         $user->remember_token = Str::random(10);
         $user->save();
 
-        // Create an admin user
-        $user = new User;
-        $user->name_first = 'Hotel';
-        $user->name_last = 'manager';
-        $user->email = 'hm@example.com';
-        $user->password = $password;
-        $user->email_verified_at = Carbon::now();
-        $user->remember_token = Str::random(10);
-        $user->save();
-        
-        // Create a regular user
-        $user = new User;
-        $user->name_first = 'Hotel';
-        $user->name_last = 'employee';
-        $user->email = 'he@example.com';
-        $user->password = $password;
-        $user->email_verified_at = Carbon::now();
-        $user->remember_token = Str::random(10);
-        $user->save();
-
-
-
+        factory(User::class, 50)->create();
     }
 }
