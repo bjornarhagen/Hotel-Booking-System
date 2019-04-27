@@ -18,8 +18,10 @@ class CreateFacilitiesTable extends Migration
             $table->bigInteger('hotel_id')->unsigned();
             $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('icon');
+
+            $table->unique(['slug', 'hotel_id']);
         });
     }
 

@@ -18,8 +18,10 @@ class CreateRoomTypesTable extends Migration
             $table->bigInteger('hotel_id')->unsigned();
             $table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('cascade');
             $table->string('name');
-            $table->string('slug')->unqiue();
+            $table->string('slug');
             $table->text('description')->nullable()->default(null);
+
+            $table->unique(['slug', 'hotel_id']);
         });
     }
 
