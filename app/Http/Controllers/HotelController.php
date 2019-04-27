@@ -168,8 +168,9 @@ class HotelController extends Controller
      * @param  \App\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show(String $hotel_slug)
     {
+        $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
         return view('hotel.show', compact('hotel'));
     }
 
