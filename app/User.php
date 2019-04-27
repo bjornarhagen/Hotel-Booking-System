@@ -55,7 +55,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function image()
     {
         return $this->hasOne('App\Image', 'id', 'image_id')->withDefault(function ($image) {
-            $image->url = config('app.user.default_image');
+            $image->url = '/images/default-user.svg';
+            $image->is_default = true;
         });
     }
 

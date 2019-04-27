@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     public function getUrlAttribute($value) {
-        if ($value === config('app.user.default_image')) {
+        if ($this->is_default) {
             return $value;
         }
 

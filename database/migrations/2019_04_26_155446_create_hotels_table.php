@@ -22,8 +22,10 @@ class CreateHotelsTable extends Migration
 
             $table->string('brand_color_primary')->nullable()->default(null);
             $table->string('brand_color_accent')->nullable()->default(null);
-            $table->string('brand_logo')->nullable()->default(null);
-            $table->string('brand_icon')->nullable()->default(null);
+            $table->bigInteger('brand_logo_id')->unsigned()->nullable()->default(null);
+            $table->foreign('brand_logo_id')->references('id')->on('images')->onDelete('set null');
+            $table->bigInteger('brand_icon_id')->unsigned()->nullable()->default(null);
+            $table->foreign('brand_icon_id')->references('id')->on('images')->onDelete('set null');
 
             $table->string('website')->nullable()->default(null);
             $table->string('contact_phone')->nullable()->default(null);
