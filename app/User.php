@@ -3,6 +3,9 @@
 namespace App;
 
 use Auth;
+use App\Hotel;
+use App\HotelUser;
+use App\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -65,5 +68,16 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $name;
+    }
+
+    public function hasRoleAtHotel(Hotel $hotel, Role $role) : bool
+    {
+        $hotel_user = HotelUser::where([
+            'user_id' => $this->id,
+            'hotel_id' => $hotel->id,
+            'role_id' => $role->id,
+        ])->get();
+
+        return $hotel_user !== null;
     }
 }
