@@ -37,5 +37,12 @@ Route::prefix('kontrollpanel')->group(function () {
 });
 
 Route::prefix('hoteller')->group(function () {
-    Route::get('{hotel_slug}', 'HotelController@show')->name('hotel.show');
+    Route::prefix('{hotel_slug}')->group(function () {
+        Route::get('/', 'HotelController@show')->name('hotel.show');
+
+        Route::prefix('booking')->group(function () {
+            Route::get('steg-1', 'BookingController@show_step_1')->name('hotel.booking.step-1');
+            Route::get('steg-2', 'BookingController@show_step_2')->name('hotel.booking.step-2');
+        });
+});
 });
