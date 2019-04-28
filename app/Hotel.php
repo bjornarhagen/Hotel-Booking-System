@@ -27,6 +27,12 @@ class Hotel extends Model
         });
     }
 
+    public function getRoomsAttribute()
+    {
+        $room_types = RoomType::where('hotel_id', $this->id)->pluck('id')->toArray();
+        return Room::whereIn('room_type_id', $room_types)->get();
+    }
+
     public function getAddressAttribute()
     {
         $address = '';
