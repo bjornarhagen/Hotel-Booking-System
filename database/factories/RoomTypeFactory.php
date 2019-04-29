@@ -14,6 +14,7 @@ $factory->define(RoomType::class, function (Faker $faker) {
         'name' => $hotel_name,
         'slug' => Str::slug($hotel_name),
         'description' => [$faker->realText, null][mt_rand(0, 1)],
+        'price' => $faker->numberBetween(500, 5000),
         'hotel_id' => Hotel::inRandomOrder()->first(),
     ];
 });

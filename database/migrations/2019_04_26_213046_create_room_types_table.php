@@ -20,7 +20,7 @@ class CreateRoomTypesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable()->default(null);
-
+            $table->integer('price')->unsigned();
             $table->unique(['slug', 'hotel_id']);
         });
     }

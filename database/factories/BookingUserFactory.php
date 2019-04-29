@@ -25,6 +25,15 @@ $factory->define(BookingUser::class, function (Faker $faker) {
         $combos[$user->id] = [$booking->id];
     }
 
+    $price_wishes = [$faker->numberBetween(100, 1000), null, null][mt_rand(0, 2)];
+    $price_parking = [$faker->numberBetween(20, 500), null, null][mt_rand(0, 2)];
+    $price_meals = [$faker->numberBetween(500, 2000), null, null][mt_rand(0, 2)];
+    $price_room = $faker->numberBetween(5000, 10000);
+    $discount = [$faker->numberBetween(5000, 10000), null, null][mt_rand(0, 2)];
+    
+    $balance = $price_wishes + $price_parking + $price_meals + $price_room - $discount;
+    $balance = [$balance, $balance/2, 0, -100][mt_rand(0, 3)];
+
     return [
         'booking_id' => $booking->id,
         'user_id' => $user->id,
@@ -37,5 +46,11 @@ $factory->define(BookingUser::class, function (Faker $faker) {
         'date_check_in' => $faker->datetime,
         'date_check_out' => $faker->datetime,
         'special_wishes' => [$faker->realText, null][mt_rand(0, 1)],
+        'price_wishes' => $price_wishes,
+        'price_parking' => $price_parking,
+        'price_meals' => $price_meals,
+        'price_room' => $price_room,
+        'discount' => $discount,
+        'balance' => $balance
     ];
 });

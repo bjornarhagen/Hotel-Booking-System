@@ -13,5 +13,6 @@ $factory->define(Room::class, function (Faker $faker) {
         'number' => $faker->numberBetween(1, 999),
         'group' => $groups[mt_rand(0, count($groups)-1)],
         'room_type_id' => RoomType::inRandomOrder()->first(),
+        'price' => [$faker->numberBetween(5000, 10000), null, null][mt_rand(0, 2)],
     ];
 });
