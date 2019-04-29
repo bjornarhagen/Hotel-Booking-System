@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -103,5 +104,50 @@ class Hotel extends Model
         }
 
         return $rooms;
+    }
+
+    public function available_parking_spots(Carbon $date_check_in, Carbon $date_check_out)
+    {
+        $parking_spots = $this->parking_spots;
+
+        if ($parking_spots !== 0) {
+            // Find amount of parking spots which are taken during the desired check in and out time
+            $unavailable_parking_spots = BookingUser::select(
+                'booking_id',
+                'date_check_in',
+                'date_check_out',
+                'parking',
+                'hotel_id'
+            )->join('bookings', 'booking_users.booking_id', '=', 'bookings.id')
+            ->where('date_check_in', '<', $date_check_out)
+            ->where('date_check_out', '>', $date_check_in)
+            ->where('hotel_id', $this->id)
+            ->where('parking', 1)
+            ->count();
+
+            $parking_spots -= $unavailable_parking_spots;
+        }
+
+        return $parking_spots;
+    }
+
+    public function getMealNamesAttribute()
+    {
+        return ['breakfast', 'lunch', 'dinner'];
+    }
+
+    public function getMealsAttribute()
+    {
+        $meal_names = $this->meal_names;
+        $meals = [];
+
+        for ($i=0; $i < count($meal_names); $i++) { 
+            $meals[$i] = [
+                'name' => $meal_names[$i],
+                'price' => $this->{'price_meal_' . $meal_names[$i]}
+            ];
+        }
+
+        return $meals;
     }
 }
