@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Room;
 use App\Hotel;
 use App\Booking;
+use App\BookingUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -301,7 +304,131 @@ class BookingController extends Controller
             }
         }
 
-        return redirect()->route('hotel.booking.step-3', $hotel->slug);
+        // If we have any errors, send the user back to the view and display the errors
+        if (!empty($error_messages)) {
+            dump($error_messages);
+            dd('errors');
+            return redirect()->back()->withErrors($error_messages)->withInput();
+        }
+
+        // Validate booking per person
+        $this->booking_validator_step_3_parking_people($request->all())->validate();
+        $request->session()->put('booking-parking_people', $request->parking_people);
+
+
+        dump($request->all());
+
+        // A last little check to make sure we don't get any offset errors
+        $people_count = $request->session()->get('booking-people_count');
+        $error = false;
+        if (
+            $people_count != count($request->firstnames)
+            || $people_count != count($request->lastnames)
+            || $people_count != count($request->emails)
+            || $people_count != count($request->special_wishes)
+            || $people_count != count($request->meals)
+        ) {
+            $error = true;
+        }
+
+        if ($error) {
+            $request->session()->flash('error', __('Something went wrong. We couldn\'t process your users data'));
+            return redirect()->back()->withInput();
+        }
+
+        $check_in_date = $request->session()->get('booking-check_in_date');
+        $check_out_date = $request->session()->get('booking-check_out_date');
+        $booking_days = $check_in_date->diffInDays($check_out_date);
+        $rooms = $request->session()->get('booking-rooms');
+        $rooms = Room::whereIn('id', $rooms)->get();
+
+        // Array to temporarly store users in
+        $users = [];
+        $booking_users = [];
+
+        for ($i=0; $i < $people_count; $i++) { 
+            $input_user = [
+                'firstname' => $request->firstnames[$i],
+                'lastname' => $request->lastnames[$i],
+                'email' => $request->emails[$i],
+                'special_wishes' => $request->special_wishes[$i],
+                'meals' => $request->meals[$i],
+                'parking' => in_array($i, $request->parking_people)
+            ];
+
+            // Check if this person already has a user
+            $user = User::where('email', $input_user['email'])->first();
+
+            if ($user === null) {
+                // No user found, let's make one
+                $user = new User;
+                $user->_is_new = true;
+                $user->firstname = $input_user['firstname'];
+                $user->lastname = $input_user['lastname'];
+                $user->email = $input_user['email'];
+            } else {
+                $user->_is_new = false;
+            }
+
+            array_push($users, $user);
+
+            // Create booking user
+            $booking_user = new BookingUser;
+            $booking_user->room_id = $rooms->first()->id;
+            $booking_user->user_id = $user->id;
+            $booking_user->date_check_in = $check_in_date;
+            $booking_user->check_out_date = $check_out_date;
+            $booking_user->is_main_booker = 0;
+            $booking_user->meal_breakfast = 0;
+            $booking_user->meal_lunch = 0;
+            $booking_user->meal_dinner = 0;
+            $booking_user->parking = 0;
+            $booking_user->special_wishes = 0;
+            $booking_user->price_room = 0;
+            $booking_user->price_meals = 0;
+            $booking_user->price_parking = 0;
+            $booking_user->price_wishes = 0;
+            $booking_user->discount = 0;
+            $booking_user->balance = 0;
+
+            // % discount
+            $discount_to_apply = 0;
+
+            // Calculate the price of the meals
+            if (in_array('breakfast', $input_user['meals'])) {
+                $booking_user->meal_breakfast = 1;
+                $booking_user->price_meals += ($hotel->price_meal_breakfast * $booking_days);
+            }
+
+            if (in_array('lunch', $input_user['meals'])) {
+                $booking_user->meal_lunch = 1;
+                $booking_user->price_meals += ($hotel->price_meal_lunch * $booking_days);
+            }
+
+            if (in_array('dinner', $input_user['meals'])) {
+                $booking_user->meal_dinner = 1;
+                $booking_user->price_meals += ($hotel->price_meal_dinner * $booking_days);
+            }
+
+            if ($input_user['parking']) {
+                $booking_user->price_parking = $hotel->price_parking_spot;
+            }
+
+            // Apply discount
+            $discount = $booking_user->price_meals * $discount_to_apply/100;
+            $booking_user->price_meals -= $discount;
+            
+            $discount = $booking_user->price_parking * $discount_to_apply/100;
+            $booking_user->price_parking -= $discount;
+
+            array_push($booking_users, $booking_user);
+        }
+
+        $user->password = Hash('booking_id');
+    
+    
+        dd('stop');
+
         return redirect()->route('hotel.booking.step-3', $hotel->slug)->withInput();
     }
 }
