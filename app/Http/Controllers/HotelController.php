@@ -168,10 +168,42 @@ class HotelController extends Controller
      * @param  \App\Hotel  $hotel
      * @return \Illuminate\Http\Response
      */
-    public function show(String $hotel_slug)
+    public function show(Request $request, String $hotel_slug)
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
-        return view('hotel.show', compact('hotel'));
+
+        $check_in_day = null;
+        $check_in_month = null;
+        $check_in_year = null;
+        $check_out_day = null;
+        $check_out_month = null;
+        $check_out_year = null;
+        $people = null;
+
+        if ($request->session()->has('booking-active')) {
+            $check_in_date = $request->session()->get('booking-check_in_date');
+            $check_in_day = $check_in_date->format('d');
+            $check_in_month = $check_in_date->format('m');
+            $check_in_year = $check_in_date->format('Y');
+
+            $check_out_date = $request->session()->get('booking-check_out_date');
+            $check_out_day = $check_out_date->format('d');
+            $check_out_month = $check_out_date->format('m');
+            $check_out_year = $check_out_date->format('Y');
+
+            $people = $request->session()->get('booking-people_count');
+        }
+
+        return view('hotel.show', compact(
+            'hotel',
+            'check_in_day',
+            'check_in_month',
+            'check_in_year',
+            'check_out_day',
+            'check_out_month',
+            'check_out_year',
+            'people'
+        ));
     }
 
     /**
