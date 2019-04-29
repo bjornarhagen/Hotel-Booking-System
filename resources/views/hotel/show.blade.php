@@ -80,9 +80,9 @@
                                 <span>Innsjekk dato</span>
                             </label>
                             <div class="input input-date">
-                                <input type="text" name="check_in_day" placeholder="Dag" list="days-list" required value="{{ old('check_in_day') }}" maxlength="2" pattern="{{ $regex_days }}" autocomplete="off">
-                                <input type="text" name="check_in_month" placeholder="Måned" list="months-list" required value="{{ old('check_in_month') }}" maxlength="2" pattern="{{ $regex_months }}" autocomplete="off">
-                                <input type="text" name="check_in_year" placeholder="År" list="years-list" required value="{{ date('Y') }}" maxlength="4" pattern="{{ $regex_years }}" autocomplete="off">
+                                <input type="text" name="check_in_day" placeholder="Dag" list="days-list" required value="{{ old('check_in_day', $check_in_day) }}" maxlength="2" pattern="{{ $regex_days }}" autocomplete="off">
+                                <input type="text" name="check_in_month" placeholder="Måned" list="months-list" required value="{{ old('check_in_month', $check_in_month) }}" maxlength="2" pattern="{{ $regex_months }}" autocomplete="off">
+                                <input type="text" name="check_in_year" placeholder="År" list="years-list" required value="{{ old('check_in_year', $check_in_year ? $check_in_year : date('Y')) }}" maxlength="4" pattern="{{ $regex_years }}" autocomplete="off">
                             </div>
                         </div>
         
@@ -92,9 +92,9 @@
                                 <span>Utsjekk dato</span>
                             </label>
                             <div class="input input-date">
-                                <input type="text" name="check_out_day" placeholder="Dag" list="days-list" required value="{{ old('check_out_day') }}" maxlength="2" pattern="{{ $regex_days }}" autocomplete="off">
-                                <input type="text" name="check_out_month" placeholder="Måned" list="months-list" required value="{{ old('check_out_month') }}" maxlength="2" pattern="{{ $regex_months }}" autocomplete="off">
-                                <input type="text" name="check_out_year" placeholder="År" list="years-list" required value="{{ date('Y') }}" maxlength="4" pattern="{{ $regex_years }}" autocomplete="off">
+                                <input type="text" name="check_out_day" placeholder="Dag" list="days-list" required value="{{ old('check_out_day', $check_out_day) }}" maxlength="2" pattern="{{ $regex_days }}" autocomplete="off">
+                                <input type="text" name="check_out_month" placeholder="Måned" list="months-list" required value="{{ old('check_out_month', $check_out_month) }}" maxlength="2" pattern="{{ $regex_months }}" autocomplete="off">
+                                <input type="text" name="check_out_year" placeholder="År" list="years-list" required value="{{ old('check_out_year', $check_out_year ? $check_out_year : date('Y')) }}" maxlength="4" pattern="{{ $regex_years }}" autocomplete="off">
                             </div>
                         </div>
         
@@ -107,7 +107,11 @@
                                 <select id="" name="people" required>
                                     <option value="" selected disabled hidden>Antall personer</option>
                                     @for ($i = 1; $i <= 15; $i++) : }}
-                                        <option value="{{ $i }}">{{ $i }}</option>
+                                        @if (old('people', $people) == $i)
+                                            <option value="{{ $i }}" selected>{{ $i }}</option>
+                                        @else
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endif
                                     @endfor
                                 </select>
                             </div>

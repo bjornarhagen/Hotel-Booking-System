@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check_session:booking-active')->except('show_step_1', 'show_step_2');
+    }
+
     public function show_step_1(Request $request, String $hotel_slug)
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
@@ -18,7 +23,7 @@ class BookingController extends Controller
     }
 
     // Validator to run before manipulating data
-    protected function booking_validator_pre(array $data)
+    protected function booking_validator_step_1_pre(array $data)
     {
         return Validator::make($data, [
             'check_in_day' => ['required', 'numeric', 'min:1', 'max:31'],
@@ -27,16 +32,17 @@ class BookingController extends Controller
             'check_out_day' => ['required', 'numeric', 'min:1', 'max:31'],
             'check_out_month' => ['required', 'numeric', 'min:1', 'max:12'],
             'check_out_year' => ['required', 'integer', 'min:' . date('Y'), 'max:' . (date('Y') + 1)],
-            'people' => ['required', 'integer', 'min:1', 'max:15'],
+            'people' => ['required', 'integer', 'min:1', 'max:15']
         ]);
     }
 
     // Validator to run after manipulating data
-    protected function booking_validator_post(array $data)
+    protected function booking_validator_step_1_post(array $data)
     {
         return Validator::make($data, [
             'check_in_date' => ['required', 'date', 'before:check_out_date'],
-            'check_out_date' => ['required', 'date', 'after:check_in_date']
+            'check_out_date' => ['required', 'date', 'after:check_in_date'],
+            'people' => ['required', 'integer', 'min:1', 'max:15']
         ]);
     }
 
@@ -45,7 +51,7 @@ class BookingController extends Controller
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
 
         // Validate initial data
-        $pre_validator = $this->booking_validator_pre($request->all());
+        $pre_validator = $this->booking_validator_step_1_pre($request->all());
         if ($pre_validator->fails()) {
             return redirect()->route('hotel.show', $hotel->slug)->withErrors($pre_validator)->withInput();
         }
@@ -60,11 +66,22 @@ class BookingController extends Controller
         $request->merge(['check_out_date' => $check_out_date]);
 
         // Validate the new date fields
-        $post_validator = $this->booking_validator_post($request->all());
+        $post_validator = $this->booking_validator_step_1_post($request->all());
         if ($post_validator->fails()) {
             return redirect()->route('hotel.show', $hotel->slug)->withErrors($post_validator)->withInput();
         }
 
+        // Save data to session
+        $request->session()->put('booking-active', true);
+        $request->session()->put('booking-check_in_date', $check_in_date);
+        $request->session()->put('booking-check_out_date', $check_out_date);
+        $request->session()->put('booking-people_count', $request->people);
+
+        $people = $request->people;
+        $room_types = $hotel->room_types;
+
+        return view('booking.show-step-2', compact('hotel', 'room_types', 'check_in_date', 'check_out_date', 'people'));
+    }
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
         $rooms = $hotel->rooms;
 
