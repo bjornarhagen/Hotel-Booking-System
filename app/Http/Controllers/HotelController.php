@@ -49,6 +49,8 @@ class HotelController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:3000'],
+            'parking_spots' => ['nullable', 'integer', 'min:0', 'max:' . (pow(2, 32)-1)],
+            'price_parking_spot' => ['nullable', 'required_with:parking_spots', 'integer', 'min:0', 'max:' . (pow(2, 32)-1)],
             'brand_color_primary' => ['nullable', 'string', 'max:10'],
             'brand_color_accent' => ['nullable', 'string', 'max:10'],
             'brand_logo' => ['nullable', 'image', 'dimensions:max_width=1024,max_height=1024', 'max:2000'],
@@ -56,11 +58,14 @@ class HotelController extends Controller
             'website' => ['nullable', 'URL', 'max:255'],
             'contact_phone' => ['nullable', 'string', 'max:255'],
             'contact_email' => ['nullable', 'email', 'max:255'],
-            'address_street' => ['nullable', 'required_with:address_city,address_zip', 'string', 'max:255'],
-            'address_city' => ['nullable', 'required_with:address_street,address_zip', 'string', 'max:255'],
-            'address_zip' => ['nullable', 'required_with:address_city,address_street', 'string', 'max:255'],
+            'address_street' => ['nullable', 'required', 'string', 'max:255'],
+            'address_city' => ['nullable', 'required', 'string', 'max:255'],
+            'address_zip' => ['nullable', 'required', 'string', 'max:255'],
             'address_lat' => ['nullable', 'required_with:address_lon', 'numeric', 'min:-90', 'max:90'],
-            'address_lon' => ['nullable', 'required_with:address_lat', 'numeric', 'min:-180', 'max:180']
+            'address_lon' => ['nullable', 'required_with:address_lat', 'numeric', 'min:-180', 'max:180'],
+            'price_meal_breakfast' => ['required', 'integer', 'min:0', 'max:' . (pow(2, 32)-1)],
+            'price_meal_lunch' => ['required', 'integer', 'min:0', 'max:' . (pow(2, 32)-1)],
+            'price_meal_dinner' => ['required', 'integer', 'min:0', 'max:' . (pow(2, 32)-1)],
         ]);
     }
 
@@ -106,6 +111,8 @@ class HotelController extends Controller
         $hotel->name = $request->name;
         $hotel->slug = $request->slug;
         $hotel->description = $request->description;
+        $hotel->parking_spots = $request->parking_spots;
+        $hotel->price_parking_spot = $request->price_parking_spot;
         $hotel->brand_color_primary = $request->brand_color_primary;
         $hotel->brand_color_accent = $request->brand_color_accent;
         $hotel->website = $request->website;
@@ -116,6 +123,9 @@ class HotelController extends Controller
         $hotel->address_zip = $request->address_zip;
         $hotel->address_lat = $request->address_lat;
         $hotel->address_lon = $request->address_lon;
+        $hotel->price_meal_breakfast = $request->price_meal_breakfast;
+        $hotel->price_meal_lunch = $request->price_meal_lunch;
+        $hotel->price_meal_dinner = $request->price_meal_dinner;
         
         if ($hotel->save()) {
             $hotel_user = new HotelUser;
@@ -241,6 +251,8 @@ class HotelController extends Controller
         $hotel->name = $request->name;
         $hotel->slug = $request->slug;
         $hotel->description = $request->description;
+        $hotel->parking_spots = $request->parking_spots;
+        $hotel->price_parking_spot = $request->price_parking_spot;
         $hotel->brand_color_primary = $request->brand_color_primary;
         $hotel->brand_color_accent = $request->brand_color_accent;
         $hotel->website = $request->website;
@@ -251,6 +263,9 @@ class HotelController extends Controller
         $hotel->address_zip = $request->address_zip;
         $hotel->address_lat = $request->address_lat;
         $hotel->address_lon = $request->address_lon;
+        $hotel->price_meal_breakfast = $request->price_meal_breakfast;
+        $hotel->price_meal_lunch = $request->price_meal_lunch;
+        $hotel->price_meal_dinner = $request->price_meal_dinner;
         $hotel->save();
 
         $success_message = __('The :resource was updated.', ['resource' => __('hotel')]);

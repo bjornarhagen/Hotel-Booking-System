@@ -30,12 +30,18 @@ class CreateHotelsTable extends Migration
             $table->string('website')->nullable()->default(null);
             $table->string('contact_phone')->nullable()->default(null);
             $table->string('contact_email')->nullable()->default(null);
-            $table->string('address_street')->nullable()->default(null);
-    
-            $table->string('address_city')->nullable()->default(null);
-            $table->string('address_zip')->nullable()->default(null);
+            
+            $table->string('address_street');
+            $table->string('address_city');
+            $table->string('address_zip');
             $table->decimal('address_lat', 8, 6)->nullable()->default(null); // http://mysql.rjweb.org/doc.php/latlng
             $table->decimal('address_lon', 9, 6)->nullable()->default(null);
+
+            $table->integer('parking_spots')->unsigned()->default(0);
+            $table->integer('price_parking_spot')->unsigned()->default(0);
+            $table->integer('price_meal_breakfast')->unsigned();
+            $table->integer('price_meal_lunch')->unsigned();
+            $table->integer('price_meal_dinner')->unsigned();
 
             $table->timestamps();
         });
