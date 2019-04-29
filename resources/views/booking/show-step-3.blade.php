@@ -1,7 +1,8 @@
 @extends('partials.master')
 
 @section('content')
-    <form method="post" action="{{ route('hotel.booking.step-3', [$hotel->slug]) }}">
+    @include('booking.nav')
+    <form method="post" action="{{ route('hotel.booking.step-3', $hotel->slug) }}">
         @csrf
         <header>
             <h1>{{ __('Your booking') }}</h1>

@@ -14,13 +14,35 @@ class BookingController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('check_session:booking-active')->except('show_step_1', 'show_step_2');
+        $this->middleware('check_session:booking-active')->except('show_step_2');
     }
 
     public function show_step_1(Request $request, String $hotel_slug)
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
-        return redirect()->route('hotel.show', $hotel->slug)->withInput();
+
+        $check_in_date = $request->session()->get('booking-check_in_date');
+        $check_in_day = $check_in_date->format('d');
+        $check_in_month = $check_in_date->format('m');
+        $check_in_year = $check_in_date->format('Y');
+
+        $check_out_date = $request->session()->get('booking-check_out_date');
+        $check_out_day = $check_out_date->format('d');
+        $check_out_month = $check_out_date->format('m');
+        $check_out_year = $check_out_date->format('Y');
+
+        $people = $request->session()->get('booking-people_count');
+
+        return view('booking.show-step-1', compact(
+            'hotel',
+            'check_in_day',
+            'check_in_month',
+            'check_in_year',
+            'check_out_day',
+            'check_out_month',
+            'check_out_year',
+            'people'
+        ));
     }
 
     // Validator to run before manipulating data
@@ -51,34 +73,43 @@ class BookingController extends Controller
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
 
-        // Validate initial data
-        $pre_validator = $this->booking_validator_step_1_pre($request->all());
-        if ($pre_validator->fails()) {
-            return redirect()->route('hotel.show', $hotel->slug)->withErrors($pre_validator)->withInput();
+        // If the request has no parameters and the booking session is active, the user just went
+        // back to look at step 2, which means we already have data from the session, no need to validate
+        if ($request->all() === [] && $request->session()->has('booking-active')) {
+            $check_in_date = $request->session()->get('booking-check_in_date');
+            $check_out_date = $request->session()->get('booking-check_out_date');
+            $people = $request->session()->get('booking-people_count');
+        } else {
+            // Validate initial data
+            $pre_validator = $this->booking_validator_step_1_pre($request->all());
+            if ($pre_validator->fails()) {
+                return redirect()->route('hotel.show', $hotel->slug)->withErrors($pre_validator)->withInput();
+            }
+
+            // Convert day, month and year fields into a date
+            $check_in_date = $request->check_in_year . '-' . $request->check_in_month . '-' . $request->check_in_day;
+            $check_in_date = new Carbon($check_in_date);
+            $request->merge(['check_in_date' => $check_in_date]);
+
+            $check_out_date = $request->check_out_year . '-' . $request->check_out_month . '-' . $request->check_out_day;
+            $check_out_date = new Carbon($check_out_date);
+            $request->merge(['check_out_date' => $check_out_date]);
+
+            // Validate the new date fields
+            $post_validator = $this->booking_validator_step_1_post($request->all());
+            if ($post_validator->fails()) {
+                return redirect()->route('hotel.show', $hotel->slug)->withErrors($post_validator)->withInput();
+            }
+
+            // Save data to session
+            $request->session()->put('booking-active', true);
+            $request->session()->put('booking-check_in_date', $check_in_date);
+            $request->session()->put('booking-check_out_date', $check_out_date);
+            $request->session()->put('booking-people_count', $request->people);
+
+            $people = $request->people;
         }
 
-        // Convert day, month and year fields into a date
-        $check_in_date = $request->check_in_year . '-' . $request->check_in_month . '-' . $request->check_in_day;
-        $check_in_date = new Carbon($check_in_date);
-        $request->merge(['check_in_date' => $check_in_date]);
-
-        $check_out_date = $request->check_out_year . '-' . $request->check_out_month . '-' . $request->check_out_day;
-        $check_out_date = new Carbon($check_out_date);
-        $request->merge(['check_out_date' => $check_out_date]);
-
-        // Validate the new date fields
-        $post_validator = $this->booking_validator_step_1_post($request->all());
-        if ($post_validator->fails()) {
-            return redirect()->route('hotel.show', $hotel->slug)->withErrors($post_validator)->withInput();
-        }
-
-        // Save data to session
-        $request->session()->put('booking-active', true);
-        $request->session()->put('booking-check_in_date', $check_in_date);
-        $request->session()->put('booking-check_out_date', $check_out_date);
-        $request->session()->put('booking-people_count', $request->people);
-
-        $people = $request->people;
         $room_types = $hotel->room_types;
 
         return view('booking.show-step-2', compact('hotel', 'room_types', 'check_in_date', 'check_out_date', 'people'));
