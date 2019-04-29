@@ -7,6 +7,7 @@ use App\Hotel;
 use App\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -82,9 +83,61 @@ class BookingController extends Controller
 
         return view('booking.show-step-2', compact('hotel', 'room_types', 'check_in_date', 'check_out_date', 'people'));
     }
+
+    protected function booking_validator_step_2(Request $request, Hotel $hotel)
+    {
+        $check_in_date = $request->session()->get('booking-check_in_date');
+        $check_out_date = $request->session()->get('booking-check_out_date');
+        $available_room_ids = $hotel->available_rooms($check_in_date, $check_out_date);
+        $available_room_ids = $available_room_ids->pluck('id')->toArray();
+
+        return Validator::make($request->all(), [
+            'rooms' => ['required', 'array', 'min:1', Rule::in($available_room_ids)],
+        ]);
+    }
+
+    public function store_step_2(Request $request, String $hotel_slug)
+    {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
-        $rooms = $hotel->rooms;
+        $this->booking_validator_step_2($request, $hotel)->validate();
+
+        // Save rooms in session
+        $request->session()->put('booking-rooms', $request->rooms);
+
+        return redirect()->route('hotel.booking.step-3', $hotel->slug);
+    }
+
+    public function show_step_3(Request $request, String $hotel_slug)
+    {
+        dump( $request->session()->get('booking-special_wishes') );
+
+        $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
+        $people_count = $request->session()->get('booking-people_count');
+        $check_in_date = $request->session()->get('booking-check_in_date');
+        $check_out_date = $request->session()->get('booking-check_out_date');
+
+        $rooms = $request->session()->get('booking-rooms');
+        $rooms = Room::whereIn('id', $rooms)->get();
+
+        $room_names = [];
+        foreach ($rooms as $room) {
+            array_push($room_names, $room->name);
+        }
+        $room_names = implode(', ', $room_names);
+
+        $meals = ['breakfast', 'lunch', 'dinner'];
+
+        return view('booking.show-step-3', compact(
+            'hotel',
+            'check_in_date',
+            'check_out_date',
+            'people_count',
+            'room_names',
+            'rooms',
+            'meals'
+        ));
+    }
 
         return view('booking.show-step-2', compact('rooms', 'check_in_date', 'check_out_date'));
     }
-}
+    }
