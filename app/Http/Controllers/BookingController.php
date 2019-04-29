@@ -138,6 +138,34 @@ class BookingController extends Controller
         ));
     }
 
-        return view('booking.show-step-2', compact('rooms', 'check_in_date', 'check_out_date'));
+    protected function booking_validator_step_3(array $data)
+    {
+        return Validator::make($data, [
+            'firstnames' => ['required', 'array'],
+            'firstnames.*' => ['required', 'string', 'max:255'],
+            'lastnames' => ['required', 'array'],
+            'lastnames.*' => ['required', 'string', 'max:255'],
+            'emails' => ['required', 'array'],
+            'emails.*' => ['required', 'email', 'max:255'],
+            'special_wishes' => ['required', 'array'],
+            'special_wishes.*' => ['nullable', 'string', 'max:3000'],
+            'meals' => ['required', 'array'],
+            'meals.*' => ['nullable', 'array'],
+            'meals.*.*' => ['required_with:meals.*', 'in:breakfast,lunch,dinner'],
+        ]);
     }
+
+    public function store_step_3(Request $request, String $hotel_slug)
+    {
+        $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
+        $this->booking_validator_step_3($request->all())->validate();
+
+        $request->session()->put('booking-firstnames', $request->firstnames);
+        $request->session()->put('booking-lastnames', $request->lastnames);
+        $request->session()->put('booking-emails', $request->emails);
+        $request->session()->put('booking-special_wishes', $request->special_wishes);
+        $request->session()->put('booking-meals', $request->meals);
+
+        return redirect()->route('hotel.booking.step-3', $hotel->slug);
     }
+}
