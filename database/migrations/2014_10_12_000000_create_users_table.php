@@ -19,13 +19,13 @@ class CreateUsersTable extends Migration
             $table->string('name_first');
             $table->string('name_last');
             $table->string('email')->unique();
+            $table->string('phone')->nullable()->default(null);
             $table->string('password');
             $table->bigInteger('image_id')->unsigned()->nullable()->default(null);
             $table->foreign('image_id')->references('id')->on('images')->onDelete('set null');
-            
-            $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable()->default(null);
             $table->datetime('login_last')->nullable()->default(null);
+            $table->rememberToken();
             $table->timestamps();
         });
 
