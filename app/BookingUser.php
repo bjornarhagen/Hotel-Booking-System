@@ -10,7 +10,14 @@ class BookingUser extends Model
     use HasCompositeKey;
 
     protected $primaryKey = ['booking_id', 'user_id'];
+
     public $timestamps = false;
+
+    public $dates = [
+        'date_check_in',
+        'date_check_out'
+    ];
+
     public function user()
     {
         return $this->belongsTo('App\User');
