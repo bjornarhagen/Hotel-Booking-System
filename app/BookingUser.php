@@ -20,4 +20,22 @@ class BookingUser extends Model
     {
         return $this->belongsTo('App\Room');
     }
+
+    public function getPriceAttribute()
+    {
+        $price = 0;
+
+        $price += $this->price_wishes;
+        $price += $this->price_parking;
+        $price += $this->price_meals;
+        $price += $this->price_room;
+
+        return $price;
+    }
+
+    public function getDaysAttribute()
+    {
+        return $this->date_check_in->diffInDays($this->date_check_out);;
+    }
+
 }
