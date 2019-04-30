@@ -550,7 +550,7 @@ class BookingController extends Controller
             $booking_user->meal_lunch = 0;
             $booking_user->meal_dinner = 0;
             $booking_user->parking = 0;
-            $booking_user->special_wishes = 0;
+            $booking_user->special_wishes = null;
             $booking_user->price_room = 0;
             $booking_user->price_meals = 0;
             $booking_user->price_parking = 0;
