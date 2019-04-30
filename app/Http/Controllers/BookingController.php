@@ -545,7 +545,6 @@ class BookingController extends Controller
             $booking_user->user_id = $user->id;
             $booking_user->date_check_in = $check_in_date;
             $booking_user->date_check_out = $check_out_date;
-            $booking_user->is_main_booker = 0;
             $booking_user->meal_breakfast = 0;
             $booking_user->meal_lunch = 0;
             $booking_user->meal_dinner = 0;
