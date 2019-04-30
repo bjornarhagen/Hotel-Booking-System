@@ -63,6 +63,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $session = $request->session();
+        $error = false;
         $simple_changes = false;
 
         // Update email
@@ -78,12 +79,13 @@ class UserController extends Controller
                 $session->flash('success', 'Din kontos e-post adresse ble oppdatert.');
                 $session->flash('info', 'Du må bekrefte din nye e-post. En lenke har blitt sendt til deg.');
             } else {
+                $error = true;
                 $session->flash('error', 'Feil passord');
             }
         }
 
         // Update password
-        if ($request->filled('new_password')) {
+        if ($request->filled('new_password') && !$error) {
             if ($user->check_password($request->current_password)) {
                 $this->update_password_validator($request->all())->validate();
 
@@ -92,12 +94,13 @@ class UserController extends Controller
     
                 $session->flash('success', 'Din kontos passord ble oppdatert.');
             } else {
+                $error = true;
                 $session->flash('error', 'Feil passord');
             }
         }
 
         // Update name
-        if ($request->filled('name_first')) {
+        if ($request->filled('name_first') && !$error) {
             $this->update_info_validator($request->all())->validate();
 
             $user->name_prefix = $request->name_prefix;
@@ -110,7 +113,7 @@ class UserController extends Controller
         }
 
         // Remove image
-        if ($request->has('image_remove')) {
+        if ($request->has('image_remove') && !$error) {
             $this->remove_image_validator($request->all())->validate();
 
             $user->image_id = null;
@@ -120,13 +123,14 @@ class UserController extends Controller
         }
 
         // Update image
-        if ($request->has('image')) {
+        if ($request->has('image') && !$error) {
             $this->update_image_validator($request->all())->validate();
 
             $image = Image::upload($user, $request->file('image'), 'profiles');
 
             if ($image === null) {
                 $session->flash('error', 'Noe gikk galt. Vi kunne ikke laste opp bilde ditt.');
+                $error = true;
             } else {
                 $user->image_id = $image->id;
                 $user->save();
@@ -135,7 +139,7 @@ class UserController extends Controller
             }
         }
 
-        if ($simple_changes) {
+        if ($simple_changes && !$error) {
             $session->flash('success', 'Din konto ble oppdatert.');
         }
 
