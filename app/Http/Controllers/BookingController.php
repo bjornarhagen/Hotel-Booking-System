@@ -289,8 +289,6 @@ class BookingController extends Controller
 
     public function show_step_3(Request $request, String $hotel_slug)
     {
-        dump( $request->session()->get('booking-special_wishes') );
-
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
         $people_count = $request->session()->get('booking-people_count');
         $check_in_date = $request->session()->get('booking-check_in_date');
@@ -471,17 +469,12 @@ class BookingController extends Controller
 
         // If we have any errors, send the user back to the view and display the errors
         if (!empty($error_messages)) {
-            dump($error_messages);
-            dd('errors');
             return redirect()->back()->withErrors($error_messages)->withInput();
         }
 
         // Validate booking per person
         $this->booking_validator_step_3_parking_people($request->all())->validate();
         $request->session()->put('booking-parking_people', $request->parking_people);
-
-
-        dump($request->all());
 
         // A last little check to make sure we don't get any offset errors
         $people_count = $request->session()->get('booking-people_count');
