@@ -17,6 +17,9 @@
             @for ($i = 0; $i < $people_count; $i++)
                 <article>
                     <h2>{{ __('Person') }} {{ $i + 1 }}</h2>
+                    @if ($i === 0 && $people_count > 1)
+                        <p>{{ __('This person is responsible for the order.') }}</p>
+                    @endif
 
                     <div class="form-group">
                         @php
@@ -111,10 +114,22 @@
                     @endforeach
 
                     <p>{{ __('Room') }}</p>
+                    @php
+                        $checked = '';
+
+                        if ($rooms->count() === 1) {
+                            $checked = ' checked';
+                        }
+                    @endphp
                     @foreach ($rooms as $room)
                         <div class="form-group">
-                            <input id="form-booking-room_people-{{ $i . '-' . $room->id }}" type="radio" name="room_people[{{$i}}]" value="{{ $room->id }}" required>
-                            <label for="form-booking-room_people-{{ $i . '-' . $room->id }}">{{ $room->name }}</label>
+                            <input id="form-booking-room_people-{{ $i . '-' . $room->id }}"
+                                type="radio"
+                                name="room_people[{{$i}}]"
+                                value="{{ $room->id }}"
+                                required
+                                {{ $checked }}>
+                            <label for="form-booking-room_people-{{ $i . '-' . $room->id }}">{{ $room->name }} ({{ $room->room_type->name }})</label>
                         </div>
                     @endforeach
                 </article>
@@ -155,6 +170,7 @@
             <p>{{ __('Available parking spots: :count', ['count' => $parking_spots_available]) }}</p>
             <p>{{ __('Price per day per spot') }} {{ $parking_spot_price }},-</p>
 
+            @if ($people_count === 1)
             <h3>{{ __('Who needs parking?') }}</h3>
             <p>{{ __('Select one person per parking spot. If you are multiple people in one car, only one person needs parking.') }}</p>
             @for ($i = 0; $i < $people_count; $i++)
@@ -163,6 +179,7 @@
                     <label for="form-booking-parking-email-{{ $i }}">{{ __('Person') }} {{ $i + 1 }}</label>
                 </div>
             @endfor
+            @endif
         </section>
     </form>
 @endsection

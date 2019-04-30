@@ -472,12 +472,22 @@ class BookingController extends Controller
             return redirect()->back()->withErrors($error_messages)->withInput();
         }
 
-        // Validate booking per person
-        $this->booking_validator_step_3_parking_people($request->all())->validate();
+        // Set parking if we only have one person
+        $people_count = $request->session()->get('booking-people_count');
+        if ((int) $people_count === 1) {
+            if ($request->parking === 'yes') {
+                $request->merge(['parking_people' => [0]]);
+            } else {
+                $request->merge(['parking_people' => []]);
+            }
+        } else {
+            // Validate booking per person
+            $this->booking_validator_step_3_parking_people($request->all())->validate();
+        }
+
         $request->session()->put('booking-parking_people', $request->parking_people);
 
         // A last little check to make sure we don't get any offset errors
-        $people_count = $request->session()->get('booking-people_count');
         $error = false;
         if (
             $people_count != count($request->firstnames)
@@ -547,6 +557,13 @@ class BookingController extends Controller
             $booking_user->price_wishes = 0;
             $booking_user->discount = 0;
             $booking_user->balance = 0;
+            
+            // Set main booker
+            if ($i === 0) {
+                $booking_user->is_main_booker = 1;
+            } else {
+                $booking_user->is_main_booker = 0;
+            }
 
             // % discount
             // $discount_to_apply = 0;
