@@ -88,7 +88,7 @@
 
                                 $selected_meals = old('meals', session('booking-meals'));
 
-                                if (!empty($selected_meals)) {
+                                if (!empty($selected_meals) && isset($selected_meals[$i])) {
                                     $checked = false;
                                     $selected_meals = $selected_meals[$i];
                                 }
@@ -171,14 +171,14 @@
             <p>{{ __('Price per day per spot') }} {{ $parking_spot_price }},-</p>
 
             @if ($people_count === 1)
-            <h3>{{ __('Who needs parking?') }}</h3>
-            <p>{{ __('Select one person per parking spot. If you are multiple people in one car, only one person needs parking.') }}</p>
-            @for ($i = 0; $i < $people_count; $i++)
-                <div class="form-group">
-                    <input id="form-booking-parking-email-{{ $i }}" type="checkbox" name="parking_people[]" value="{{ $i }}">
-                    <label for="form-booking-parking-email-{{ $i }}">{{ __('Person') }} {{ $i + 1 }}</label>
-                </div>
-            @endfor
+                <h3>{{ __('Who needs parking?') }}</h3>
+                <p>{{ __('Select one person per parking spot. If you are multiple people in one car, only one person needs parking.') }}</p>
+                @for ($i = 0; $i < $people_count; $i++)
+                    <div class="form-group">
+                        <input id="form-booking-parking-email-{{ $i }}" type="checkbox" name="parking_people[]" value="{{ $i }}">
+                        <label for="form-booking-parking-email-{{ $i }}">{{ __('Person') }} {{ $i + 1 }}</label>
+                    </div>
+                @endfor
             @endif
         </section>
     </form>
