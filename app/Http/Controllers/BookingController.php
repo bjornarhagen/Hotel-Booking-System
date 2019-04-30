@@ -226,6 +226,19 @@ class BookingController extends Controller
         ]);
     }
 
+    protected function booking_validator_step_3_rooms(array $data)
+    {
+        $people = session()->get('booking-people_count');
+        $check_in_date = session()->get('booking-check_in_date');
+        $check_out_date = session()->get('booking-check_out_date');
+        $rooms = session()->get('booking-rooms');
+
+        return Validator::make($data, [
+            'room_people' => ['required', 'array', 'min:' . $people, 'max:' . $people],
+            'room_people.*' => ['required', 'integer', Rule::in($rooms)],
+        ]);
+    }
+
     protected function booking_validator_step_3_parking(array $data)
     {
         return Validator::make($data, [
@@ -287,6 +300,13 @@ class BookingController extends Controller
             array_push($failed_validators, $meals_validator);
         }
 
+        $rooms_validator = $this->booking_validator_step_3_rooms($request->all());
+        if ($rooms_validator->passes()) {
+            $request->session()->put('booking-room_people', $request->room_people);
+        } else {
+            array_push($failed_validators, $rooms_validator);
+        }
+
         $parking_validator = $this->booking_validator_step_3_parking($request->all());
         if ($parking_validator->passes()) {
             $request->session()->put('booking-parking', $request->parking);
@@ -342,9 +362,9 @@ class BookingController extends Controller
         $rooms = $request->session()->get('booking-rooms');
         $rooms = Room::whereIn('id', $rooms)->get();
 
-        // Array to temporarly store users in
-        $users = [];
-        $booking_users = [];
+        $booking = new Booking;
+        $booking->hotel_id = $hotel->id;
+        $booking->save();
 
         for ($i=0; $i < $people_count; $i++) { 
             $input_user = [
@@ -353,6 +373,7 @@ class BookingController extends Controller
                 'email' => $request->emails[$i],
                 'special_wishes' => $request->special_wishes[$i],
                 'meals' => $request->meals[$i],
+                'room' => $request->room_people[$i],
                 'parking' => in_array($i, $request->parking_people)
             ];
 
@@ -362,22 +383,20 @@ class BookingController extends Controller
             if ($user === null) {
                 // No user found, let's make one
                 $user = new User;
-                $user->_is_new = true;
-                $user->firstname = $input_user['firstname'];
-                $user->lastname = $input_user['lastname'];
+                $user->name_first = $input_user['firstname'];
+                $user->name_last = $input_user['lastname'];
                 $user->email = $input_user['email'];
-            } else {
-                $user->_is_new = false;
+                $user->password = Hash::make($user->firstname . $booking->id);
+                $user->save();
             }
-
-            array_push($users, $user);
 
             // Create booking user
             $booking_user = new BookingUser;
-            $booking_user->room_id = $rooms->first()->id;
+            $booking_user->booking_id = $booking->id;
+            $booking_user->room_id = $input_user['room'];
             $booking_user->user_id = $user->id;
             $booking_user->date_check_in = $check_in_date;
-            $booking_user->check_out_date = $check_out_date;
+            $booking_user->date_check_out = $check_out_date;
             $booking_user->is_main_booker = 0;
             $booking_user->meal_breakfast = 0;
             $booking_user->meal_lunch = 0;
@@ -392,7 +411,7 @@ class BookingController extends Controller
             $booking_user->balance = 0;
 
             // % discount
-            $discount_to_apply = 0;
+            // $discount_to_apply = 0;
 
             // Calculate the price of the meals
             if (in_array('breakfast', $input_user['meals'])) {
@@ -410,25 +429,31 @@ class BookingController extends Controller
                 $booking_user->price_meals += ($hotel->price_meal_dinner * $booking_days);
             }
 
+            // Calculate price of parking
             if ($input_user['parking']) {
+                $booking_user->parking = true;
                 $booking_user->price_parking = $hotel->price_parking_spot;
             }
 
+            // Calculate price of room
+            $room = Room::find($booking_user->room_id);
+            $booking_user->price_room = ($room->price * $booking_days);
+
             // Apply discount
-            $discount = $booking_user->price_meals * $discount_to_apply/100;
-            $booking_user->price_meals -= $discount;
+            // $discount = $booking_user->price_meals * $discount_to_apply/100;
+            // $booking_user->price_meals -= $discount;
             
-            $discount = $booking_user->price_parking * $discount_to_apply/100;
-            $booking_user->price_parking -= $discount;
+            // $discount = $booking_user->price_parking * $discount_to_apply/100;
+            // $booking_user->price_parking -= $discount;
 
-            array_push($booking_users, $booking_user);
+            $booking_user->balance += $booking_user->price_meals;
+            $booking_user->balance += $booking_user->price_parking;
+            $booking_user->balance += $booking_user->price_room;
+
+            $booking_user->save();
         }
-
-        $user->password = Hash('booking_id');
     
-    
-        dd('stop');
-
-        return redirect()->route('hotel.booking.step-3', $hotel->slug)->withInput();
+        $request->session()->flash('success', __('Booking complete.'));
+        return redirect()->route('hotel.show', $hotel->slug);
     }
 }

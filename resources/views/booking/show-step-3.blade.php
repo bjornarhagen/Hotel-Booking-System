@@ -109,6 +109,14 @@
                             <label for="form-booking-meal-email-{{ $i . '-' . $loop->index }}">{{ $label_text }}</label>
                         </div>
                     @endforeach
+
+                    <p>{{ __('Room') }}</p>
+                    @foreach ($rooms as $room)
+                        <div class="form-group">
+                            <input id="form-booking-room_people-{{ $i . '-' . $room->id }}" type="radio" name="room_people[{{$i}}]" value="{{ $room->id }}" required>
+                            <label for="form-booking-room_people-{{ $i . '-' . $room->id }}">{{ $room->name }}</label>
+                        </div>
+                    @endforeach
                 </article>
             @endfor
         </section>
