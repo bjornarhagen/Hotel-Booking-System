@@ -49,7 +49,12 @@ Route::prefix('hoteller')->group(function () {
 
         Route::prefix('booking')->group(function () {
             Route::get('steg-1', 'BookingController@show_step_1')->name('hotel.booking.step-1');
+            
             Route::get('steg-2', 'BookingController@show_step_2')->name('hotel.booking.step-2');
+            Route::post('steg-2', 'BookingController@store_step_2');
+            
+            Route::get('steg-3', 'BookingController@show_step_3')->name('hotel.booking.step-3');
+            Route::post('steg-3', 'BookingController@store_step_3');
         });
-});
+    });
 });
