@@ -35,7 +35,7 @@
                                 value="{{ $room->id }}"
                                 {{ in_array($room->id, old('rooms', session('booking-rooms', []))) ? 'checked' : null }}>
                             </h3>
-                            <p>{{ __('Price') }}: {{ $room->price }}</p>
+                            <p>{{ __('Price') }}: {{ $room->price . ',-' }}</p>
                             <p>Available</p>
 
                             @if ($loop->first)
