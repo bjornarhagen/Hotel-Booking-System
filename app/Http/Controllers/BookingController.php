@@ -452,7 +452,25 @@ class BookingController extends Controller
 
             $booking_user->save();
         }
-    
+
+        // Clear booking data from session
+        $request->session()->forget([
+            'booking-active',
+            'booking-rooms',
+            'booking-people_count',
+            'booking-check_in_date',
+            'booking-check_out_date',
+            'booking-firstnames',
+            'booking-lastnames',
+            'booking-emails',
+            'booking-special_wishes',
+            'booking-meals',
+            'booking-room_people',
+            'booking-parking',
+            'booking-parking_people'
+        ]);
+
+        // TODO: SEND TO SUMMARY PAGE
         $request->session()->flash('success', __('Booking complete.'));
         return redirect()->route('hotel.show', $hotel->slug);
     }
