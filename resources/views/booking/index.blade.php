@@ -26,6 +26,7 @@
                     </div>
                     <div class="actions">
                         <a href="{{ route('admin.hotel.booking.edit', [$hotel, $booking]) }}">{{ __('Edit') }}</a>
+                        <a href="{{ route('admin.hotel.booking.delete', [$hotel, $booking]) }}">{{ __('Delete') }}</a>
                     </div>
                 </footer>
             </article>

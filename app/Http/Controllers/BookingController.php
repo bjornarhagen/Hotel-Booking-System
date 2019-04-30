@@ -163,6 +163,12 @@ class BookingController extends Controller
 
     public function destroy(Request $request, Hotel $hotel, Booking $booking)
     {
+        $booking->delete();
+
+        $success_message = __('The :resource was deleted.', ['resource' => __('booking')]);
+        $request->session()->flash('success', $success_message);
+
+        return redirect()->route('admin.hotel.booking.index', $hotel);
     }
 
     public function show_step_1(Request $request, String $hotel_slug)
