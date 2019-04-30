@@ -571,17 +571,17 @@ class BookingController extends Controller
             // Calculate the price of the meals
             if (in_array('breakfast', $input_user['meals'])) {
                 $booking_user->meal_breakfast = 1;
-                $booking_user->price_meals += ($hotel->price_meal_breakfast * $booking_days);
+                $booking_user->price_meals += ($hotel->price_meal_breakfast * $booking_user->days);
             }
 
             if (in_array('lunch', $input_user['meals'])) {
                 $booking_user->meal_lunch = 1;
-                $booking_user->price_meals += ($hotel->price_meal_lunch * $booking_days);
+                $booking_user->price_meals += ($hotel->price_meal_lunch * $booking_user->days);
             }
 
             if (in_array('dinner', $input_user['meals'])) {
                 $booking_user->meal_dinner = 1;
-                $booking_user->price_meals += ($hotel->price_meal_dinner * $booking_days);
+                $booking_user->price_meals += ($hotel->price_meal_dinner * $booking_user->days);
             }
 
             // Calculate price of parking
@@ -592,7 +592,7 @@ class BookingController extends Controller
 
             // Calculate price of room
             $room = Room::find($booking_user->room_id);
-            $booking_user->price_room = ($room->price * $booking_days);
+            $booking_user->price_room = ($room->price * $booking_user->days);
 
             // Apply discount
             // $discount = $booking_user->price_meals * $discount_to_apply/100;
