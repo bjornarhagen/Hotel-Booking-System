@@ -211,7 +211,7 @@ class BookingController extends Controller
     protected function booking_validator_step_1_post(array $data)
     {
         return Validator::make($data, [
-            'check_in_date' => ['required', 'date', 'before:check_out_date'],
+            'check_in_date' => ['required', 'date', 'before:check_out_date', 'after:today'],
             'check_out_date' => ['required', 'date', 'after:check_in_date'],
             'people' => ['required', 'integer', 'min:1', 'max:15']
         ]);
