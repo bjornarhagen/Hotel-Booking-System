@@ -18,6 +18,151 @@ class BookingController extends Controller
     public function __construct()
     {
         $this->middleware('check_session:booking-active')->except('show_step_2');
+
+    public function index(Request $request, Hotel $hotel)
+    {
+        return view('booking.index', compact('hotel'));
+    }
+
+    public function edit(Request $request, Hotel $hotel, Booking $booking)
+    {
+        return view('booking.edit', compact('hotel', 'booking'));
+    }
+
+    protected function booking_validator_update(array $data, Hotel $hotel, Booking $booking)
+    {
+        $people_count = $booking->data->count();
+        $user_ids = $booking->data->pluck('user_id')->toArray();
+        
+        $email_rules = [];
+        foreach ($user_ids as $key => $user_id) {
+            $rule_key = 'emails.' . $key;
+            $rule_string = ['required', 'email', 'max:255'];
+            array_push($rule_string, Rule::unique('users', 'email')->ignore($user_id));
+
+            array_push($email_rules, [
+                $rule_key,
+                $rule_string
+            ]);
+        }
+
+        return Validator::make($data, [
+            'firstnames' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            'firstnames.*' => ['required', 'string', 'max:255'],
+            'lastnames' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            'lastnames.*' => ['required', 'string', 'max:255'],
+            'emails' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            $email_rules,
+            // 'emails.*' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user_ids)],
+            'check_in_date' => ['required', 'date', 'before:check_out_date', 'after:today'],
+            'check_out_date' => ['required', 'date', 'after:check_in_date'],
+            'special_wishes' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            'special_wishes.*' => ['nullable', 'string', 'max:3000'],
+            'rooms' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            'rooms.*' => ['required', 'integer', Rule::in($booking->rooms->pluck('id')->toArray())],
+            'parking' => ['required', 'array', 'min:' . $people_count, 'max:' . $people_count],
+            'parking.*' => ['required', 'string', 'in:yes,no'],
+            'meals' => ['nullable', 'array'],
+            'meals.*' => ['nullable', 'array'],
+            'meals.*.*' => ['required_with:meals.*', 'string', Rule::in($hotel->meal_names)]
+        ]);
+    }
+
+    public function update(Request $request, Hotel $hotel, Booking $booking)
+    {
+        $user = $request->user();
+        $roles = Role::whereIn('slug', ['hotel_manager', 'hotel_employee'])->get();
+        $user_is_guest = true;
+
+        foreach ($roles as $role) {
+            if ($user->hasRoleAtHotel($hotel, $role)) {
+                $user_is_guest = false;
+                continue;
+            }
+        }
+
+        if ($user_is_guest) {
+            dump('user is guest');
+        } else {
+            dump('user is admin');
+        }
+
+        $validator = $this->booking_validator_update($request->all(), $hotel, $booking);
+        $validator->validate();
+
+        foreach ($booking->data as $booking_data) {
+            $booking_user = $booking_data->user;
+            $i = $booking_user->id;
+
+            // Update user
+            $booking_user->name_first = $request->firstnames[$i];
+            $booking_user->name_last = $request->lastnames[$i];
+            $booking_user->email = $request->emails[$i];
+            $booking_user->save();
+
+            // Update dates and special wishes
+            $booking_data->special_wishes = $request->special_wishes[$i];
+            $booking_data->date_check_in = $request->check_in_date;
+            $booking_data->date_check_out = $request->check_out_date;
+
+            // Update room
+            $booking_data->room_id = $request->rooms[$i];
+            $booking_data->price_room = ($booking_data->room->price * $booking_data->days);
+            
+            // Update parking
+            $booking_data->parking = ($request->parking[$i] === 'yes');
+            if ($booking_data->parking) {
+                $booking_data->price_parking = ($hotel->price_parking_spot * $booking_data->days);
+            }
+
+            // Update meals
+            if (isset($request->meals[$i])) {
+                $meals = $request->meals[$i];
+                $booking_data->meal_breakfast = in_array('breakfast', $meals);
+                $booking_data->meal_lunch = in_array('lunch', $meals);
+                $booking_data->meal_dinner = in_array('dinner', $meals);
+                $booking_data->price_meals = 0;
+
+                // Update meal prices
+                if ($booking_data->meal_breakfast) {
+                    $booking_data->price_meals += ($hotel->price_meal_breakfast * $booking_data->days);
+                }
+                
+                if ($booking_data->meal_lunch) {
+                    $booking_data->price_meals += ($hotel->price_meal_lunch * $booking_data->days);
+                }
+
+                if ($booking_data->meal_dinner) {
+                    $booking_data->price_meals += ($hotel->price_meal_dinner * $booking_data->days);
+                }
+            } else {
+                $booking_data->meal_breakfast = false;
+                $booking_data->meal_lunch = false;
+                $booking_data->meal_dinner = false;
+                $booking_data->price_meals = 0;
+            }
+
+            // Update discount and balance
+            $booking_data->discount = 0;
+            $booking_data->balance = 0;
+            $booking_data->balance += $booking_data->price_room;
+            $booking_data->balance += $booking_data->price_parking;
+            $booking_data->balance += $booking_data->price_meals;
+
+            $booking_data->save();
+        }
+
+        $request->session()->flash('success', __('Your changes were saved.'));
+        return redirect()->route('admin.hotel.booking.edit', [$hotel, $booking]);
+    }
+
+    public function delete(Request $request, Hotel $hotel, Booking $booking)
+    {
+        return view('booking.delete', compact('hotel', 'booking'));
+    }
+
+    public function destroy(Request $request, Hotel $hotel, Booking $booking)
+    {
     }
 
     public function show_step_1(Request $request, String $hotel_slug)

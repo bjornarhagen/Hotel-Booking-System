@@ -32,7 +32,14 @@ Route::prefix('kontrollpanel')->group(function () {
             Route::patch('{hotel}/oppdater', 'HotelController@update')->name('admin.hotel.update');
             Route::get('{hotel}/fjern', 'HotelController@delete')->name('admin.hotel.delete');
             Route::delete('{hotel}/slett', 'HotelController@destroy')->name('admin.hotel.destroy');
-        });
+
+            Route::prefix('{hotel}/bookinger')->group(function () {
+                Route::get('/', 'BookingController@index')->name('admin.hotel.booking.index');
+                Route::get('{booking}/rediger', 'BookingController@edit')->name('admin.hotel.booking.edit');
+                Route::patch('{booking}/oppdater', 'BookingController@update')->name('admin.hotel.booking.update');
+                Route::get('{booking}/fjern', 'BookingController@delete')->name('admin.hotel.booking.delete');
+                Route::delete('{booking}/slett', 'BookingController@destroy')->name('admin.hotel.booking.destroy');
+            });
     });
 });
 
