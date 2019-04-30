@@ -1,20 +1,23 @@
 <footer id="footer-main">
     <div id="footer-main-wrapper">
         <p>
-            <a href="#personvern" target="_blank" rel="noopener">Personvern</a>
-            <span>|</span>
-            <a href="{{ route('login') }}">{{ __('Login') }}</a>
-            @if (Route::has('register'))
+            @guest
+                <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                @if (Route::has('register'))
+                    <span>|</span>
+                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                @endif
+            @endguest
+            @auth
                 <span>|</span>
-                <a href="{{ route('register') }}">{{ __('Register') }}</a>
-            @endif
-            <span>|</span>
-            <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
-            <span>|</span>
-            <a href="{{ route('user.show') }}">{{ __('My profile') }}</a>
+                <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+                <span>|</span>
+                <a href="{{ route('user.show') }}">{{ __('My profile') }}</a>
+            @endauth
         </p>
         <p class="copyright">
-            <a href="https://github.com/bjornarhagen/Hotel-Booking-System" noopener noreferrer target="_blank">{{ config('app.name') }}</a>
+            <span>{{ __('Source') }}:</span>
+            <a href="https://github.com/bjornarhagen/Hotel-Booking-System" noopener noreferrer target="_blank">https://github.com/bjornarhagen/Hotel-Booking-System</a>
             <span>—</span>
             <span>{{ __('A project by') }}</span>
             <a href="https://bjornar.dev" noopener noreferrer target="_blank">Bjørnar Hagen</a>
