@@ -19,7 +19,7 @@ class CheckHotelRole
      * @param  mixed $role - string or array of role name(s)
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $roles)
     {
         if (Auth::guest()) {
             $request->session()->flash('error', 'You must be logged in.');
@@ -33,13 +33,10 @@ class CheckHotelRole
         }
 
         $user = $request->user();
+        $roles = explode('|', $roles);
+        $user_has_access = false;
 
-        if (is_array($role)) {
-            $roles = $role;
-        } else {
-            $roles = explode('|', $role);
-        }
-
+        // Check if user has any of the roles
         foreach($roles as $role) {
             $role = Role::where('slug', $role)->first();
 
@@ -47,16 +44,17 @@ class CheckHotelRole
                 throw new Exception('Couldn\'t find the role ' . $role);
             }
 
-            if (!$user->hasRoleAtHotel($hotel, $role)) {
-                $error_message = __('Only :role have access.', [
-                    'role' => __($role->name)
-                ]);
-                $request->session()->flash('error', $error_message);
-
-                return redirect()->back();
+            if ($user->hasRoleAtHotel($hotel, $role)) {
+                $user_has_access = true;
+                continue;
             }
         }
 
+        // User doesn't have any of the required roles, send back
+        if (!$user_has_access) {
+            $request->session()->flash('error', __('You don\'t have access.'));
+            return redirect()->back();
+        }
 
         return $next($request);
     }
