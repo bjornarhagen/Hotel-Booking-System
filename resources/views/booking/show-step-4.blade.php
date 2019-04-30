@@ -170,7 +170,7 @@
             <p>{{ __('Available parking spots: :count', ['count' => $parking_spots_available]) }}</p>
             <p>{{ __('Price per day per spot') }} {{ $parking_spot_price }},-</p>
 
-            @if ($people_count === 1)
+            @if ($people_count > 1)
                 <h3>{{ __('Who needs parking?') }}</h3>
                 <p>{{ __('Select one person per parking spot. If you are multiple people in one car, only one person needs parking.') }}</p>
                 @for ($i = 0; $i < $people_count; $i++)
