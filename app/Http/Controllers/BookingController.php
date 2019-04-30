@@ -514,27 +514,14 @@ class BookingController extends Controller
             }
         } else {
             // Validate booking per person
-            $this->booking_validator_step_4_parking_people($request->all())->validate();
+            if ($request->parking === 'yes') {
+                $this->booking_validator_step_4_parking_people($request->all())->validate();
+            } else {
+                $request->merge(['parking_people' => []]);
+            }
         }
 
         $request->session()->put('booking-parking_people', $request->parking_people);
-
-        // A last little check to make sure we don't get any offset errors
-        $error = false;
-        if (
-            $people_count != count($request->firstnames)
-            || $people_count != count($request->lastnames)
-            || $people_count != count($request->emails)
-            || $people_count != count($request->special_wishes)
-            || $people_count != count($request->meals)
-        ) {
-            $error = true;
-        }
-
-        if ($error) {
-            $request->session()->flash('error', __('Something went wrong. We couldn\'t process your users data'));
-            return redirect()->back()->withInput();
-        }
 
         $check_in_date = $request->session()->get('booking-check_in_date');
         $check_out_date = $request->session()->get('booking-check_out_date');
@@ -547,12 +534,18 @@ class BookingController extends Controller
         $booking->save();
 
         for ($i=0; $i < $people_count; $i++) {
+            if (isset($request->meals[$i])) {
+                $meals = $request->meals[$i];
+            } else {
+                $meals = [];
+            }
+
             $input_user = [
                 'firstname' => $request->firstnames[$i],
                 'lastname' => $request->lastnames[$i],
                 'email' => $request->emails[$i],
                 'special_wishes' => $request->special_wishes[$i],
-                'meals' => $request->meals[$i],
+                'meals' => $meals,
                 'room' => $request->room_people[$i],
                 'parking' => in_array($i, $request->parking_people)
             ];
