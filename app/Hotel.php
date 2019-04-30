@@ -35,6 +35,11 @@ class Hotel extends Model
         return $this->hasMany('App\RoomType');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany('App\Booking');
+    }
+
     public function getRoomsAttribute()
     {
         $room_types = RoomType::where('hotel_id', $this->id)->pluck('id')->toArray();

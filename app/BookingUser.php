@@ -11,4 +11,13 @@ class BookingUser extends Model
 
     protected $primaryKey = ['booking_id', 'user_id'];
     public $timestamps = false;
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo('App\Room');
+    }
 }
