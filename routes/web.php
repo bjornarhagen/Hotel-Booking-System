@@ -55,6 +55,9 @@ Route::prefix('hoteller')->group(function () {
             
             Route::get('steg-3', 'BookingController@show_step_3')->name('hotel.booking.step-3');
             Route::post('steg-3', 'BookingController@store_step_3');
+            
+            Route::get('steg-4', 'BookingController@show_step_4')->name('hotel.booking.step-4');
+            Route::post('steg-4', 'BookingController@store_step_4');
         });
     });
 });

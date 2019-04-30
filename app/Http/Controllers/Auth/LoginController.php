@@ -36,4 +36,14 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function redirectTo()
+    {
+        if (session('booking-active') === true && session('booking-hotel') !== null) {
+            $hotel = session('booking-hotel');
+            return route('hotel.booking.step-4', $hotel->slug);
+        }
+
+        return route('dashboard.index');
+    }
 }

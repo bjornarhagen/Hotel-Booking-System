@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\User;
+use App\Role;
 use App\Room;
 use App\Hotel;
 use App\Booking;
@@ -257,6 +259,7 @@ class BookingController extends Controller
 
             // Save data to session
             $request->session()->put('booking-active', true);
+            $request->session()->put('booking-hotel', $hotel);
             $request->session()->put('booking-check_in_date', $check_in_date);
             $request->session()->put('booking-check_out_date', $check_out_date);
             $request->session()->put('booking-people_count', $request->people);
@@ -290,10 +293,27 @@ class BookingController extends Controller
         // Save rooms in session
         $request->session()->put('booking-rooms', $request->rooms);
 
+        // Logged in users can go directly to step 4
+        if (Auth::check()) {
+            return redirect()->route('hotel.booking.step-4', $hotel->slug);
+        }
+
         return redirect()->route('hotel.booking.step-3', $hotel->slug);
     }
 
     public function show_step_3(Request $request, String $hotel_slug)
+    {
+        $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
+
+        // Logged in users can go directly to step 4
+        if (Auth::check()) {
+            return redirect()->route('hotel.booking.step-4', $hotel->slug);
+        }
+
+        return view('booking.show-step-3', compact('hotel'));
+    }
+
+    public function show_step_4(Request $request, String $hotel_slug)
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
         $people_count = $request->session()->get('booking-people_count');
@@ -319,7 +339,7 @@ class BookingController extends Controller
         $parking_spots_available = $hotel->available_parking_spots($check_in_date, $check_out_date);
         $parking_spot_price = $hotel->price_parking_spot;
 
-        return view('booking.show-step-3', compact(
+        return view('booking.show-step-4', compact(
             'hotel',
             'check_in_date',
             'check_out_date',
@@ -333,7 +353,7 @@ class BookingController extends Controller
         ));
     }
 
-    protected function booking_validator_step_3_firstnames(array $data)
+    protected function booking_validator_step_4_firstnames(array $data)
     {
         return Validator::make($data, [
             'firstnames' => ['required', 'array'],
@@ -341,7 +361,7 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_lastnames(array $data)
+    protected function booking_validator_step_4_lastnames(array $data)
     {
         return Validator::make($data, [
             'lastnames' => ['required', 'array'],
@@ -349,7 +369,7 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_emails(array $data)
+    protected function booking_validator_step_4_emails(array $data)
     {
         return Validator::make($data, [
             'emails' => ['required', 'array'],
@@ -357,7 +377,7 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_wishes(array $data)
+    protected function booking_validator_step_4_wishes(array $data)
     {
         return Validator::make($data, [
 
@@ -366,7 +386,7 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_meals(array $data)
+    protected function booking_validator_step_4_meals(array $data)
     {
         return Validator::make($data, [
             'meals' => ['required', 'array'],
@@ -375,7 +395,7 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_rooms(array $data)
+    protected function booking_validator_step_4_rooms(array $data)
     {
         $people = session()->get('booking-people_count');
         $check_in_date = session()->get('booking-check_in_date');
@@ -388,14 +408,14 @@ class BookingController extends Controller
         ]);
     }
 
-    protected function booking_validator_step_3_parking(array $data)
+    protected function booking_validator_step_4_parking(array $data)
     {
         return Validator::make($data, [
             'parking' => ['required', 'in:yes,no'],
         ]);
     }
 
-    protected function booking_validator_step_3_parking_people(array $data)
+    protected function booking_validator_step_4_parking_people(array $data)
     {
         $people = session('booking-people_count');
 
@@ -405,7 +425,7 @@ class BookingController extends Controller
         ]);
     }
 
-    public function store_step_3(Request $request, String $hotel_slug)
+    public function store_step_4(Request $request, String $hotel_slug)
     {
         $hotel = Hotel::where('slug', $hotel_slug)->firstOrFail();
         $failed_validators = [];
@@ -414,49 +434,49 @@ class BookingController extends Controller
         // We do this one and one, so that if some of fields pass it's validator, we can save it
         // to session in order to improve the user experience.
 
-        $firstnames_validator = $this->booking_validator_step_3_firstnames($request->all());
+        $firstnames_validator = $this->booking_validator_step_4_firstnames($request->all());
         if ($firstnames_validator->passes()) {
             $request->session()->put('booking-firstnames', $request->firstnames);
         } else {
             array_push($failed_validators, $firstnames_validator);
         }
 
-        $lastnames_validator = $this->booking_validator_step_3_lastnames($request->all());
+        $lastnames_validator = $this->booking_validator_step_4_lastnames($request->all());
         if ($lastnames_validator->passes()) {
             $request->session()->put('booking-lastnames', $request->lastnames);
         } else {
             array_push($failed_validators, $lastnames_validator);
         }
 
-        $emails_validator = $this->booking_validator_step_3_emails($request->all());
+        $emails_validator = $this->booking_validator_step_4_emails($request->all());
         if ($emails_validator->passes()) {
             $request->session()->put('booking-emails', $request->emails);
         } else {
             array_push($failed_validators, $emails_validator);
         }
 
-        $wishes_validator = $this->booking_validator_step_3_wishes($request->all());
+        $wishes_validator = $this->booking_validator_step_4_wishes($request->all());
         if ($wishes_validator->passes()) {
             $request->session()->put('booking-special_wishes', $request->special_wishes);
         } else {
             array_push($failed_validators, $wishes_validator);
         }
 
-        $meals_validator = $this->booking_validator_step_3_meals($request->all());
+        $meals_validator = $this->booking_validator_step_4_meals($request->all());
         if ($meals_validator->passes()) {
             $request->session()->put('booking-meals', $request->meals);
         } else {
             array_push($failed_validators, $meals_validator);
         }
 
-        $rooms_validator = $this->booking_validator_step_3_rooms($request->all());
+        $rooms_validator = $this->booking_validator_step_4_rooms($request->all());
         if ($rooms_validator->passes()) {
             $request->session()->put('booking-room_people', $request->room_people);
         } else {
             array_push($failed_validators, $rooms_validator);
         }
 
-        $parking_validator = $this->booking_validator_step_3_parking($request->all());
+        $parking_validator = $this->booking_validator_step_4_parking($request->all());
         if ($parking_validator->passes()) {
             $request->session()->put('booking-parking', $request->parking);
         } else {
@@ -488,7 +508,7 @@ class BookingController extends Controller
             }
         } else {
             // Validate booking per person
-            $this->booking_validator_step_3_parking_people($request->all())->validate();
+            $this->booking_validator_step_4_parking_people($request->all())->validate();
         }
 
         $request->session()->put('booking-parking_people', $request->parking_people);
@@ -616,6 +636,7 @@ class BookingController extends Controller
         // Clear booking data from session
         $request->session()->forget([
             'booking-active',
+            'booking-hotel',
             'booking-rooms',
             'booking-people_count',
             'booking-check_in_date',
