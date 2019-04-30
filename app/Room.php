@@ -15,7 +15,7 @@ class Room extends Model
 
     public function getNameAttribute()
     {
-        return $this->group . $this->number;
+        return $this->group . sprintf('%02d', $this->number);
     }
 
     public function room_type()
