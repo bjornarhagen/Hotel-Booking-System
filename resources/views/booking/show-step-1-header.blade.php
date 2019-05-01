@@ -34,12 +34,9 @@
         }
         $regex_years .= ')';
 
-        // Booking info link
-        $target_string = '';
-        if (!empty($booking_info_link['target'])) {
-            $target_string = ' target="' . $booking_info_link['target'] . '"';
-            $target_string .= ' noopener';
-        }
+        $booking_info_link = 'https://itstud.hiof.no/uinv19/uinv19gr2/';
+        $booking_info_link_text = 'Les mer';
+        $booking_info_text = 'Første 100 rabatt';
         @endphp
 
         <section id="booking-form-wrapper">
@@ -47,8 +44,8 @@
                 <p class="booking-form-intro-text">
                     <span>{{ $booking_info_text }}</span>
 
-                    <a href="{{ $booking_info_link['url'] }}" {{ $target_string }}>
-                        <span>{{ $booking_info_link['title'] }}</span>
+                    <a href="{{ $booking_info_link }}" target="_blank" rel="noopener">
+                        <span>{{ $booking_info_link_text }}</span>
                         @icon('chevron-right')
                     </a>
                 </p>

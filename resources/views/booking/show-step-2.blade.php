@@ -5,20 +5,22 @@
     <form class="room_types" method="post" action="{{ route('hotel.booking.step-2', $hotel->slug) }}">
         @csrf
         <header>
-            <h1>{{ __('Booking — Pick a room') }}</h1>
+            <div class="inner-wrapper">
+                <h1>{{ __('Booking — Pick a room') }}</h1>
 
-            <p>{{ __('People') }}: {{ $people }}</p>
-            <p>{{ __('Check in') }}: {{ $check_in_date->format('d. F Y') }}</p>
-            <p>{{ __('Check out') }}: {{ $check_out_date->format('d. F Y') }}</p>
+                <p>{{ __('People') }}: {{ $people }}</p>
+                <p>{{ __('Check in') }}: {{ $check_in_date->format('d. F Y') }}</p>
+                <p>{{ __('Check out') }}: {{ $check_out_date->format('d. F Y') }}</p>
 
-            @php
-                $nights = $check_in_date->diffInDays($check_out_date);
-            @endphp
+                @php
+                    $nights = $check_in_date->diffInDays($check_out_date);
+                @endphp
 
-            <button type="submit">
-                <span>{{ __('Continue') }}</span>
-                @icon('chevron-right')
-            </button>
+                <button type="submit">
+                    <span>{{ __('Continue') }}</span>
+                    @icon('chevron-right')
+                </button>
+            </div>
         </header>
         @foreach ($room_types as $room_type)
             @php
@@ -44,30 +46,8 @@
                             } else {
                                 $checked = null;
                             }
-
                         @endphp
-                        <article class="{{ $room_classes }}">
-                            <div class="image" style="background-image: url('{{ asset('images/' . $hotel->slug . '/' . $room->room_type->slug . '.jpg') }}')"></div>
-                            <h3 class="name">{{ $room->name }}</h3>
-                            <p class="description">{{ $room->room_type->description }}</p>
-                            <input id="room-checkbox-{{ $room->id }}"
-                                name="rooms[]"
-                                type="checkbox"
-                                value="{{ $room->id }}"
-                                {{ $checked }}
-                            >
-                            <label class="select" for="room-checkbox-{{ $room->id }}">
-                                <p class="price">{{ __('Price') }}: {{ $room->price . ',-' }}</p>
-                                @if ($nights > 1)
-                                    <p class="price-nights">{{ __('Price for :nights nights', ['nights' => $nights]) }}: {{ ($room->price * $nights) . ',-' }}</p>
-                                @endif
-                                <p class="button button-primary">
-                                    @icon('checkbox-blank', 'not-selected')
-                                    @icon('checkbox-checked', 'selected')
-                                    <span>{{ __('Select room') }}</span>
-                                </p>
-                            </label>
-                        </article>
+                        @include('booking.show-step-2-room')
                         @if ($loop->first && $loop->remaining > 0)
                             <div class="see-more-button">
                                 <button type="button" class="button-blank expand-trigger">
@@ -79,11 +59,17 @@
                     @endforeach
                 @endif
                 @if ($unavailableRooms->count() !== 0)
+                    @php
+                        $room_classes = 'room busy';
+                        
+                        if ($loop->index == 0) {
+                            $room_classes .= ' first';
+                        }
+
+                        $checked =  'disabled';
+                    @endphp
                     @foreach ($unavailableRooms as $room)
-                        <article class="room busy">
-                            <h3>{{ $room->id }}</h3>
-                            <p>Busy</p>
-                        </article>
+                        @include('booking.show-step-2-room')
                     @endforeach
                 @endif
             </section>

@@ -16,11 +16,16 @@
     }
 
     header {
-        padding: 1em;
+        padding: 2em 1em;
         background-color: $white;
         box-shadow: 0 1em 2em -1em rgba($shade-base, 0.25);
 
+        @media screen and (min-width: $size-l) {
+            padding: 4em 1em;
+        }
+
         h1,
+        h2,
         p {
             margin: 0;
         }
@@ -28,6 +33,13 @@
         button {
             display: block;
             margin: 1em 0 0 auto;
+        }
+
+        .inner-wrapper {
+            display: block;
+            margin: 0 auto;
+            width: $size-l;
+            max-width: 100%;
         }
     }
 
@@ -61,6 +73,42 @@
 }
 
 #main-wrapper .room_types .room {
+    display: none;
+    padding: 1em;
+    width: 100%;
+
+    @media screen and (min-width: $size-m) {
+        width: 50%;
+    }
+
+    @media screen and (min-width: $size-l) {
+        width: (100%/3);
+    }
+
+    .image,
+    .description {
+        display: none;
+    }
+
+    .name {
+        margin: 0;
+    }
+
+    .price,
+    .price-nights {
+        margin: 0;
+    }
+
+    &.busy {
+        cursor: not-allowed;
+        opacity: 0.25;
+        user-select: none;
+
+        .select {
+            pointer-events: none;
+        }
+    }
+
     .select {
         user-select: none;
 
@@ -102,38 +150,6 @@
             }
         }
     }
-
-    &.available {
-        display: none;
-        padding: 1em;
-        width: 100%;
-
-        @media screen and (min-width: $size-m) {
-            width: 50%;
-        }
-
-        @media screen and (min-width: $size-l) {
-            width: (100%/3);
-        }
-
-        .image,
-        .description {
-            display: none;
-        }
-
-        .name {
-            margin: 0;
-        }
-
-        .price,
-        .price-nights {
-            margin: 0;
-        }
-    }
-
-    // &.busy {
-    //     opacity: 0.5;
-    // }
 
     &.available.first {
         padding: 0;
@@ -235,7 +251,7 @@
 
 #main-wrapper .room_types {
     .room_type.open {
-        .room.available {
+        .room {
             display: block;
 
             &.first {
