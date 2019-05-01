@@ -115,7 +115,7 @@
 
                 <div class="form-group form-group-submit">
                     <div class="input">
-                        <button type="submit">Finn rom</button>
+                        <button class="button-primary" type="submit">Finn rom</button>
                     </div>
                 </div>
             </form>

@@ -13,8 +13,21 @@ input[type="submit"],
     &:focus,
     &:hover {
         color: $white;
-        border-color: $shade-darker;
+        border-color: $shade-darkest;
         background-color: $shade-darkest;
+    }
+
+    &.button-primary {
+        color: $primary-darker;
+        border-color: $primary-light;
+        background-color: $primary-light;
+
+        &:focus,
+        &:hover {
+            color: $white;
+            border-color: $black;
+            background-color: $black;
+        }
     }
 }
 
