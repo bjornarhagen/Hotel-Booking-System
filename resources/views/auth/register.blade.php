@@ -1,18 +1,18 @@
 @extends('partials.master')
 
 @section('content')
+<div class="padded-a">
+    <h1>{{ __('Register') }}</h1>
+    <form method="POST" action="{{ route('register') }}">
+        @csrf
 
-<h1>{{ __('Register') }}</h1>
-<form method="POST" action="{{ route('register') }}">
-    @csrf
+        @include('auth.register-fields')
 
-    @include('auth.register-fields')
-
-    <div class="form-group">
-        <button type="submit">
-            {{ __('Register') }}
-        </button>
-    </div>
-</form>
-
+        <div class="form-group">
+            <button type="submit">
+                {{ __('Register') }}
+            </button>
+        </div>
+    </form>
+</div>
 @endsection

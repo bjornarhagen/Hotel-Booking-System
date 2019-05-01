@@ -52,6 +52,61 @@ img {
     width: 4em;
 }
 
+.padded-a {
+    padding: 1em;
+
+    @media screen and (min-width: $size-s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding: 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding: 8em;
+    }
+}
+
+.padded-lr {
+    padding-left: 1em;
+    padding-right: 1em;
+
+    @media screen and (min-width: $size-s) {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-left: 4em;
+        padding-right: 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-left: 8em;
+        padding-right: 8em;
+    }
+}
+
+.padded-tb-half {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    @media screen and (min-width: $size-s) {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-top: 4em;
+        padding-bottom: 4em;
+    }
+}
 #flash-messages {
     background-color: red;
     padding: 1em;

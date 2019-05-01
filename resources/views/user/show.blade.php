@@ -1,12 +1,12 @@
 @extends('partials.master')
 
 @section('content')
-<div>
+<div class="padded-a">
     <h1>{{ __('User') }} — {{ $user->name }}</h1>
     <img src="{{ $user->image->url }}" alt="{{ __(':name profile picture', ['name' => $user->name_first]) }}">
 </div>
 
-<form action="{{ route('user.update') }}" method="post" enctype=multipart/form-data>
+<form class="padded-lr" action="{{ route('user.update') }}" method="post" enctype=multipart/form-data>
     @csrf
 
     <fieldset>
