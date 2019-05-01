@@ -105,3 +105,38 @@
         }
     }
 }
+
+#nav-booking {
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: $shade-base;
+
+    .nav-step {
+        color: $black;
+        font-weight: 300;
+
+        &.nav-step-active {
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        &:hover,
+        &:focus {
+            color: $shade-darker;
+        }
+    }
+
+    @media screen and (min-width: $size-s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding: 2em 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding: 2em 8em;
+    }
+}

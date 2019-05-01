@@ -195,6 +195,8 @@ class BookingController extends Controller
 
         $people = $request->session()->get('booking-people_count');
 
+        $step = 1;
+
         return view('booking.show-step-1', compact(
             'hotel',
             'check_in_day',
@@ -203,7 +205,8 @@ class BookingController extends Controller
             'check_out_day',
             'check_out_month',
             'check_out_year',
-            'people'
+            'people',
+            'step'
         ));
     }
 
@@ -274,7 +277,16 @@ class BookingController extends Controller
 
         $room_types = $hotel->room_types;
 
-        return view('booking.show-step-2', compact('hotel', 'room_types', 'check_in_date', 'check_out_date', 'people'));
+        $step = 2;
+
+        return view('booking.show-step-2', compact(
+            'hotel',
+            'room_types',
+            'check_in_date',
+            'check_out_date',
+            'people',
+            'step'
+        ));
     }
 
     protected function booking_validator_step_2(Request $request, Hotel $hotel)
@@ -315,7 +327,9 @@ class BookingController extends Controller
             return redirect()->route('hotel.booking.step-4', $hotel->slug);
         }
 
-        return view('booking.show-step-3', compact('hotel'));
+        $step = 3;
+
+        return view('booking.show-step-3', compact('hotel', 'step'));
     }
 
     public function show_step_4(Request $request, String $hotel_slug)
@@ -344,6 +358,8 @@ class BookingController extends Controller
         $parking_spots_available = $hotel->available_parking_spots($check_in_date, $check_out_date);
         $parking_spot_price = $hotel->price_parking_spot;
 
+        $step = 4;
+
         return view('booking.show-step-4', compact(
             'hotel',
             'check_in_date',
@@ -354,7 +370,8 @@ class BookingController extends Controller
             'meals',
             'parking_spots',
             'parking_spot_price',
-            'parking_spots_available'
+            'parking_spots_available',
+            'step'
         ));
     }
 
