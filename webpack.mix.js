@@ -6,6 +6,7 @@ mix.sass("resources/sass/app.scss", "public/css").version();
 mix.sass("resources/sass/booking-step-2.scss", "public/css").version();
 mix.sass("resources/sass/booking-step-3.scss", "public/css").version();
 mix.sass("resources/sass/booking-step-4.scss", "public/css").version();
+mix.sass("resources/sass/nice-forms.scss", "public/css").version();
 mix.copy("resources/icons", "public/icons");
 mix.copy("resources/images", "public/images");
 

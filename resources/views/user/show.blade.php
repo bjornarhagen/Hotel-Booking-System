@@ -89,4 +89,5 @@
     </div>
 </form>
 <script src="{{ asset('js/user.js') }}"></script>
+<link href="{{ asset('css/nice-forms.css') }}" rel="stylesheet">
 @endsection

@@ -210,5 +210,6 @@
             </div>
         </footer>
     </form>
+    <link href="{{ asset('css/nice-forms.css') }}" rel="stylesheet">
     <link href="{{ asset('css/booking-step-4.css') }}" rel="stylesheet">
 @endsection

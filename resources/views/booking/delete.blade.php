@@ -13,7 +13,9 @@
             </div>
             <div class="form-group">
                 <button type="submit">{{ __('Yes, delete') }}</button>
-            </div>
-        </form>
-    </section>
+                </div>
+            </form>
+        </section>
+    </div>
+    <link href="{{ asset('css/nice-forms.css') }}" rel="stylesheet">
 @endsection

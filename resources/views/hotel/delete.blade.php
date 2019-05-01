@@ -18,4 +18,5 @@
             </form>
         </section>
     </div>
+    <link href="{{ asset('css/nice-forms.css') }}" rel="stylesheet">
 @endsection
