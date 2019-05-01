@@ -1,6 +1,8 @@
 <header class="page-header">
     <div class="page-header-overlay"></div>
-    <div class="page-header-background"></div>
+    <div class="page-header-background"
+        style="background-image: url('{{ asset('images/'.$hotel->slug.'/header.jpg') }}')"
+    ></div>
     <div id="page-navigation-padding"></div>
     <div class="page-header-content">
         <h1 class="page-title entry-title">{{ $hotel->name }}</h1>
