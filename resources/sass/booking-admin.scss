@@ -1,0 +1,128 @@
+@import "variables";
+
+#main-wrapper > .bookings {
+    .booking-labels,
+    .booking .booking-row {
+        display: grid;
+        grid-template-columns:
+            4fr
+            2fr
+            3fr
+            3fr
+            2fr
+            2fr
+            1fr
+            1fr
+            1fr
+            1fr
+            2fr
+            2fr
+            2fr;
+
+        span {
+            font-size: 14px;
+            line-height: 1;
+            padding: 0.2em 0em 0.2em 0.4em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+    }
+
+    .booking-labels {
+        position: sticky;
+        top: 0;
+        font-weight: 700;
+        background-color: $white;
+        border-bottom: 1px solid $shade-light;
+
+        span {
+            display: inline-flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-right: 1px solid $shade-light;
+
+            &:last-child {
+                border-right: 0;
+            }
+        }
+    }
+
+    .booking .booking-row {
+        border-bottom: 1px solid $shade-light;
+
+        span {
+            display: inline-flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-right: 1px solid $shade-light;
+
+            &:last-child {
+                border-right: 0;
+            }
+        }
+
+        &:last-of-type {
+            border-bottom: 0;
+        }
+    }
+
+    .booking {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: $white;
+        box-shadow: 0 1em 2em -1em rgba($shade-base, 0.25);
+
+        footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            background-color: $primary-lightest;
+        }
+
+        .booking-row {
+            width: 100%;
+        }
+
+        .summary,
+        .actions {
+            width: 100%;
+            padding: 0.2em 0.4em;
+        }
+
+        .summary {
+            font-weight: 700;
+            display: flex;
+            justify-content: flex-start;
+            align-content: center;
+            align-items: center;
+            line-height: 1;
+            font-size: 16px;
+
+            h2 {
+                margin: 0 2em 0 0;
+                font-size: inherit;
+            }
+        }
+
+        .actions {
+            display: flex;
+            font-size: 14px;
+
+            .button:first-child {
+                margin-left: auto;
+            }
+        }
+    }
+}
+
+#main-wrapper > .bookings .booking-row .item {
+    .label {
+        font-weight: 700;
+    }
+
+    .value {
+        font-family: monospace;
+    }
+}

@@ -56,14 +56,14 @@
     <fieldset>
         <legend>{{ $user->name }}</legend>
         <div class="form-group">
-            <label for="form-booking-person-firstname-{{ $user->id }}">{{ __('Firstname') }}</label>
+            <label for="form-booking-person-firstname-{{ $user->id }}">{{ __('First name') }}</label>
             <input id="form-booking-person-firstname-{{ $user->id }}"
                 value="{{ $firstname }}"
                 type="text"
                 name="firstnames[{{ $user->id }}]">
         </div>
         <div class="form-group">
-            <label for="form-booking-person-lastname-{{ $user->id }}">{{ __('Lastname') }}</label>
+            <label for="form-booking-person-lastname-{{ $user->id }}">{{ __('Last name') }}</label>
             <input id="form-booking-person-lastname-{{ $user->id }}"
                 value="{{ $lastname }}"
                 type="text"
