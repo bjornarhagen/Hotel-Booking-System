@@ -575,7 +575,7 @@ class BookingController extends Controller
                 $user->name_first = $input_user['firstname'];
                 $user->name_last = $input_user['lastname'];
                 $user->email = $input_user['email'];
-                $user->password = Hash::make($user->firstname . $booking->id);
+                $user->password = Hash::make($user->name_first . $booking->id);
                 $user->save();
             }
 
@@ -667,7 +667,7 @@ class BookingController extends Controller
         ]);
 
         // TODO: SEND TO SUMMARY PAGE
-        $request->session()->flash('success', __('Booking complete.'));
+        $request->session()->flash('success', __('Booking complete. Your booking id:') . ' ' . $booking->id);
         return redirect()->route('hotel.show', $hotel->slug);
     }
 }

@@ -14,7 +14,7 @@
             <h2>{{ $hotel->name }}</h2>
             <img src="{{ $hotel->brand_icon->url }}" alt="{{ $hotel->name }} {{ __('icon') }}">
             <nav>
-                <a href="{{ route('hotel.show', $hotel->slug) }}">{{ __('Show') }}</a>
+                {{-- <a href="{{ route('hotel.show', $hotel->slug) }}">{{ __('Show') }}</a> --}}
                 {{-- <a href="{{ route('admin.hotel.room.index', $hotel) }}">{{ __('Rooms') }}</a> --}}
                 <a href="{{ route('admin.hotel.booking.index', $hotel) }}">{{ __('Bookings') }}</a>
                 @hotel_role($hotel, 'hotel_manager')

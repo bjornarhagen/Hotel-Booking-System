@@ -11,7 +11,10 @@
                 @method('patch')
                 @include('hotel.form-fields')
                 <div class="form-group">
-                    <button type="submit">{{ __('Save') }}</button>
+                    <button type="submit">
+                        @icon('save')
+                        <span>{{ __('Save') }}</span>
+                    </button>
                 </div>
             </form>
         </section>

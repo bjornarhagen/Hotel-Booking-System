@@ -17,9 +17,7 @@
     </div>
     <div class="form-group">
         <label for="form-hotel-description">{{ __('Description') }}</label>
-        <textarea id="form-hotel-description"
-            value="{{ old('description', isset($hotel->description) ? $hotel->description : null) }}"
-            name="description"></textarea>
+        <textarea id="form-hotel-description" name="description">{{ old('description', isset($hotel->description) ? $hotel->description : null) }}</textarea>
     </div>
     <div class="form-group">
         <label for="form-hotel-website">{{ __('Website') }}</label>

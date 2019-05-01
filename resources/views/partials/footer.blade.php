@@ -15,7 +15,7 @@
             @endauth
         </p>
         <p class="copyright">
-            <span>{{ __('Source') }}:</span>
+            <span>{{ __('Sourcecode') }}:</span>
             <a href="https://github.com/bjornarhagen/Hotel-Booking-System" noopener noreferrer target="_blank">https://github.com/bjornarhagen/Hotel-Booking-System</a>
             <span>—</span>
             <span>{{ __('A project by') }}</span>

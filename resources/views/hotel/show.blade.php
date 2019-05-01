@@ -5,8 +5,6 @@
         @include('booking.show-step-1-header')
 
         <section class="padded-lr">
-            <img src="{{ $hotel->brand_logo->url }}" alt="{{ $hotel->name }} {{ __('logo') }}">
-            <p>{!! nl2br(htmlspecialchars($hotel->description)) !!}</p>
             <dl>
                 @if ($hotel->website !== null)
                     <dt>{{ __('Website') }}</dt>
@@ -28,6 +26,7 @@
                     @endif
                 @endif
             </dl>
+            <p class="hotel-description">{!! nl2br(htmlspecialchars($hotel->description)) !!}</p>
         </section>
     </article>
 @endsection

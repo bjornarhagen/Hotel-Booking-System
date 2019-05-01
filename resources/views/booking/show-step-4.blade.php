@@ -4,15 +4,6 @@
     @include('booking.nav')
     <form method="post" action="{{ route('hotel.booking.step-4', $hotel->slug) }}">
         @csrf
-        <header>
-            <div class="inner-wrapper">
-                <h1>{{ __('Your booking') }}</h1>
-                
-                <p>{{ __('Check in') }}: {{ $check_in_date->format('d. F Y') }}</p>
-                <p>{{ __('Check out') }}: {{ $check_out_date->format('d. F Y') }}</p>
-                <p>{{ __('Rooms') }}: {{ $room_names }}</p>
-            </div>
-        </header>
         <section class="people">
             @for ($i = 0; $i < $people_count; $i++)
                 <article class="person">
@@ -22,7 +13,7 @@
                             <span>{{ __('Person') }} {{ $i + 1 }}</span>
                         </h2>
                         @if ($i === 0 && $people_count > 1)
-                            <p>{{ __('This person is responsible for the order.') }}</p>
+                            <p>{{ __('This person is responsible for the booking.') }}</p>
                         @endif
 
                         <div class="form-group">
@@ -182,7 +173,7 @@
             </div>
 
             <p>{{ __('Available parking spots: :count', ['count' => $parking_spots_available]) }}</p>
-            <p>{{ __('Price per day per spot') }} {{ $parking_spot_price }},-</p>
+            <p>{{ __('Price per day per spot') }}: {{ $parking_spot_price === 0 ? 'gratis' : $parking_spot_price }},-</p>
 
             @if ($people_count > 1)
                 <h3>{{ __('Who needs parking?') }}</h3>
@@ -203,7 +194,7 @@
                 <p>{{ __('Check out') }}: {{ $check_out_date->format('d. F Y') }}</p>
                 <p>{{ __('Rooms') }}: {{ $room_names }}</p>
 
-                <button type="submit">
+                <button class="button-primary" type="submit">
                     <span>{{ __('Complete booking') }}</span>
                     @icon('chevron-right')
                 </button>
