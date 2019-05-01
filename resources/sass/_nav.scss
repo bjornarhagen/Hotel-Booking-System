@@ -1,0 +1,98 @@
+#nav-main-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+    color: $black;
+    background-color: $white;
+    border-bottom: 1px solid $shade-lighter;
+
+    @media screen and (min-width: $size-s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding: 2em 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding: 2em 8em;
+    }
+
+    .nav-logo {
+        display: block;
+        text-decoration: none;
+        margin: auto;
+        margin-right: 1em;
+
+        .logo,
+        .icon {
+            height: 100%;
+            width: auto;
+        }
+
+        .logo {
+            display: none;
+            max-height: 2em;
+        }
+
+        .icon {
+            max-height: 3em;
+            min-width: 1em;
+            min-height: 1em;
+        }
+
+        .icon-logo {
+            width: 2em;
+            display: inline-block;
+            margin-right: 0.4em;
+        }
+
+        @media screen and (min-width: $size-m) {
+            .logo {
+                display: block;
+            }
+
+            .icon {
+                display: none;
+            }
+        }
+    }
+
+    .nav-link {
+        color: currentColor;
+        text-decoration: none;
+
+        &:focus,
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .nav-left,
+    .nav-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .nav-left {
+        margin-right: auto;
+    }
+
+    .nav-right {
+        margin-left: auto;
+
+        .nav-link {
+            margin-right: 1em;
+
+            @media screen and (min-width: $size-l) {
+                margin-right: 2em;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

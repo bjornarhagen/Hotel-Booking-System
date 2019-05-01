@@ -1,0 +1,23 @@
+button,
+input[type="submit"],
+.button {
+    cursor: pointer;
+    display: inline-block;
+    font-size: inherit;
+    padding: 0.4em 0.8em;
+    border-radius: 4px;
+    color: $white;
+    border: 1px solid $shade-darker;
+    background-color: $shade-darker;
+
+    &:focus,
+    &:hover {
+        color: $white;
+        border-color: $shade-darker;
+        background-color: $shade-darkest;
+    }
+}
+
+a.button {
+    text-decoration: none;
+}

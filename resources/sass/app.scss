@@ -1,5 +1,133 @@
 @import "variables";
 
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    color: $shade-darker;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: $shade-lightest;
+
+    @media screen and (min-width: $size-m) {
+        font-size: 18px;
+        line-height: 1.8;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: $blue-darker;
+}
+
+a {
+    color: $blue-dark;
+
+    &:focus,
+    &:hover {
+        color: $blue-darkest;
+    }
+}
+
+img {
+    vertical-align: middle;
+    max-width: 100%;
+    width: 4em;
+}
+
+#flash-messages {
+    background-color: red;
+    padding: 1em;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+body > footer {
+    padding: 1em;
+    color: $shade-lighter;
+    background-color: $black;
+
+    @media screen and (min-width: $size-s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size-m) {
+        padding: 4em;
+    }
+
+    a {
+        display: inline-block;
+        color: $blue-light;
+        line-height: inherit;
+
+        &:focus,
+        &:hover {
+            color: $blue-lightest;
+        }
+    }
+}
+
+// .form-group {
+//     display: grid;
+//     grid-template-columns: 1fr 2fr;
+//     padding: 0.3em 0;
+
+//     label {
+//         font-weight: 700;
+//     }
+
+//     input,
+//     textarea,
+//     select {
+//         padding: 0.4em;
+//         border: 1px solid black;
+//     }
+
+//     input:required,
+//     textarea:required,
+//     select:required {
+//         border: 1px solid mix(black, red, 25%);
+//     }
+// }
+
+.room_types {
+    .available {
+        opacity: 0.5;
+
+        &.first {
+            opacity: 1;
+        }
+    }
+
+    .busy {
+        opacity: 0.2;
+    }
+}
+
+@import "nav";
+@import "dropdown";
+@import "button";
+@import "form";
+
 .hidden {
     display: none !important;
 }

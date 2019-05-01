@@ -1,0 +1,24 @@
+input,
+select,
+textarea {
+    font-size: inherit;
+    border-radius: 4px;
+    padding: 0.2em 0.4em;
+    border: 1px solid $black;
+    background-color: $white;
+
+    @media screen and (min-width: $size-m) {
+        padding: 0.4em 0.8em;
+    }
+
+    &:focus {
+        color: $yellow-darkest;
+        border-color: $yellow-darker;
+        background-color: $yellow-lightest;
+    }
+}
+
+label {
+    cursor: pointer;
+    font-weight: 700;
+}

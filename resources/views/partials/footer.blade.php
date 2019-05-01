@@ -9,8 +9,7 @@
                 @endif
             @endguest
             @auth
-                <span>|</span>
-                <a href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a>
+                <a href="{{ route('admin.hotel.index') }}">{{ __('Dashboard') }}</a>
                 <span>|</span>
                 <a href="{{ route('user.show') }}">{{ __('My profile') }}</a>
             @endauth
@@ -23,4 +22,5 @@
             <a href="https://bjornar.dev" noopener noreferrer target="_blank">Bjørnar Hagen</a>
         </p>
     </div>
+    <script src="{{ asset('js/app.js') }}"></script>
 </footer>
