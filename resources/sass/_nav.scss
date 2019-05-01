@@ -112,6 +112,15 @@
     flex-direction: row;
     justify-content: space-between;
     background-color: $shade-base;
+    font-size: 12px;
+
+    @media screen and (min-width: $size-s) {
+        font-size: 14px;
+    }
+
+    @media screen and (min-width: $size-m) {
+        font-size: inherit;
+    }
 
     .nav-step {
         color: $black;
