@@ -180,10 +180,12 @@ body > footer {
     }
 }
 
+// Site wide
 @import "nav";
 @import "dropdown";
 @import "button";
 @import "form";
+@import "icon";
 
 .hidden {
     display: none !important;
