@@ -42,19 +42,23 @@ class DatabaseSeeder extends Seeder
         $room_types = [
             'enkeltrom' => [
                 'price' => 990,
-                'count' => 10
+                'count' => 10,
+                'description' => 'Hotellets komfortable enkeltrom med parkettgulv har en 120 cm bred seng, flatskjermtv, skrivebord og en lenestol. Badet er flislagt, og har badekar samt hårføner. Passer utmerket for deg som reiser alene.'
             ],
             'dobbeltrom' => [
                 'price' => 1290,
-                'count' => 8
+                'count' => 8,
+                'description' => 'Dobbeltrom er komfortable rom med en lun atmosfære, interiør i mørkt tre, med utsikt mot hotellets hage. Rommene har parkettgulv, en 140 cm bred duxseng, flatskjermtv, skrivebord, lenestol og strykejern/strykebrett. Baderommet har dusj samt hårføner.'
             ],
             'suite' => [
                 'price' => 1990,
-                'count' => 2
+                'count' => 2,
+                'description' => 'Våre suite rom er romslige med smakfull innredning i mørkt tre og en liten balkong. På rommet er det en 180 cm bred DUX-seng, TV, skrivebord, lenestol, strykejern- og brett, kaffemaskin og morgenkåper. Badet er flislagt og har dusj og hårføner. Perfekt for deg som vil unne deg det lille ekstra.'
             ],
             'bryllupssuite' => [
                 'price' => 2490,
-                'count' => 1
+                'count' => 1,
+                'description' => 'Blomster, musserende vin og jordbær dyppet i sjokolade er klart når dere kommer, og neste morgen dekker vi opp til en romantisk bryllupsfrokost på suiten. Resten av dagen kan dere tilbringe på rommet eller i Artesia Spa.'
             ]
         ];
 
@@ -64,6 +68,7 @@ class DatabaseSeeder extends Seeder
             $room_type->hotel_id = $hotel->id;
             $room_type->name = ucfirst($key);
             $room_type->slug = Str::slug($room_type->name);
+            $room_type->description = $info['description'];
             $room_type->price = $info['price'];
             $room_type->save();
 
