@@ -23,6 +23,7 @@
         text-decoration: none;
         margin: auto;
         margin-right: 1em;
+        font-weight: 700;
 
         .logo,
         .icon {
@@ -84,14 +85,22 @@
         margin-left: auto;
 
         .nav-link {
-            margin-right: 1em;
+            margin-right: 0.6em;
+            font-size: 12px;
 
-            @media screen and (min-width: $size-l) {
-                margin-right: 2em;
+            @media screen and (min-width: $size-s) {
+                font-size: 14px;
             }
 
-            &:last-child {
-                margin-right: 0;
+            @media screen and (min-width: $size-l) {
+                font-size: inherit;
+                margin-right: 2em;
+            }
+        }
+
+        .dropdown {
+            @media screen and (min-width: $size-l) {
+                margin-left: 4em;
             }
         }
     }

@@ -9,7 +9,7 @@
             @else
                 <a class="nav-link nav-logo" href="{{ route('site.index') }}">
                     <img class="icon-logo" src="{{ config('app.logo') }}" alt="{{ config('app.name') }} logo">
-                    <span>{{ config('app.name') }}</span>
+                    <span>HBS</span>
                 </a>
             @endif
         </div>
@@ -23,7 +23,7 @@
         @endguest
         @auth
             <div class="nav-right">
-                {{-- <a class="nav-link" href="{{ route('dashboard.index') }}">{{ __('Dashboard') }}</a> --}}
+                <a class="nav-link" href="{{ route('site.index') }}">{{ __('Frontpage') }}</a>
                 @hotel_guest
                     <a class="nav-link" href="#">Mine ordre</a>
                 @else
