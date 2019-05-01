@@ -145,43 +145,6 @@ body > footer {
     }
 }
 
-// .form-group {
-//     display: grid;
-//     grid-template-columns: 1fr 2fr;
-//     padding: 0.3em 0;
-
-//     label {
-//         font-weight: 700;
-//     }
-
-//     input,
-//     textarea,
-//     select {
-//         padding: 0.4em;
-//         border: 1px solid black;
-//     }
-
-//     input:required,
-//     textarea:required,
-//     select:required {
-//         border: 1px solid mix(black, red, 25%);
-//     }
-// }
-
-.room_types {
-    .available {
-        opacity: 0.5;
-
-        &.first {
-            opacity: 1;
-        }
-    }
-
-    .busy {
-        opacity: 0.2;
-    }
-}
-
 // Site wide
 @import "nav";
 @import "dropdown";

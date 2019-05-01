@@ -29,6 +29,19 @@ input[type="submit"],
             background-color: $black;
         }
     }
+
+    &.button-blank {
+        color: $shade-darkest;
+        border-color: transparent;
+        background-color: transparent;
+
+        &:focus,
+        &:hover {
+            color: $white;
+            border-color: $black;
+            background-color: $black;
+        }
+    }
 }
 
 a.button {
