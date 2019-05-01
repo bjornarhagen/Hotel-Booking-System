@@ -22,5 +22,7 @@
             <a href="https://bjornar.dev" noopener noreferrer target="_blank">Bjørnar Hagen</a>
         </p>
     </div>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet"> 
     <script src="{{ asset('js/app.js') }}"></script>
 </footer>
