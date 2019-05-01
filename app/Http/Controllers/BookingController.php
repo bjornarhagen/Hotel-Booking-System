@@ -226,8 +226,7 @@ class BookingController extends Controller
     {
         return Validator::make($data, [
             'check_in_date' => ['required', 'date', 'before:check_out_date', 'after:today'],
-            'check_out_date' => ['required', 'date', 'after:check_in_date'],
-            'people' => ['required', 'integer', 'min:1', 'max:15']
+            'check_out_date' => ['required', 'date', 'after:check_in_date']
         ]);
     }
 
