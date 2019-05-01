@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $hotel->slug = Str::slug($hotel->name);
         $hotel->brand_color_primary = '#AE9731';
         $hotel->brand_color_accent = '#000000';
-        $hotel->website = 'https://havnehotellet-i-halden.no';
+        $hotel->website = 'https://itstud.hiof.no/uinv19/uinv19gr2/';
         $hotel->contact_email = 'post@hhih.no';
         $hotel->contact_phone = '6922334455';
         $hotel->address_street = 'Mathias Bjørns gate';
