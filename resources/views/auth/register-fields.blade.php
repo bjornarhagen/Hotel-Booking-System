@@ -1,6 +1,11 @@
 <div class="form-group">
-    <label for="name">{{ __('Name') }}</label>
-    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
+    <label for="firstname">{{ __('First name') }}</label>
+    <input id="firstname" type="text" name="firstname" value="{{ old('firstname') }}" required autofocus>
+</div>
+
+<div class="form-group">
+    <label for="lastname">{{ __('Last name') }}</label>
+    <input id="lastname" type="text" name="lastname" value="{{ old('lastname') }}" required>
 </div>
 
 <div class="form-group">

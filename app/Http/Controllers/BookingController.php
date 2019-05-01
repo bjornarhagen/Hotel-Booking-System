@@ -22,8 +22,8 @@ class BookingController extends Controller
         $admin_pages = ['index', 'delete', 'destroy'];
 
         $this->middleware('auth')->only($admin_pages ,'edit', 'update');
-        $this->middleware('verified')->only($admin_pages ,'edit', 'update');
-        $this->middleware('hotel_role:hotel_manager|hotel_employee')->only($admin_pages,'edit', 'update');
+        // $this->middleware('verified')->only($admin_pages ,'edit', 'update');
+        $this->middleware('hotel_role:hotel_manager|hotel_employee')->only($admin_pages, 'edit', 'update');
         // $this->middleware('check_session:booking-active')->except($admin_pages, 'edit', 'update', 'show_step_2', 'store_step_2');
     }
 

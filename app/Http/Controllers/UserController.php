@@ -72,12 +72,12 @@ class UserController extends Controller
                 $this->update_email_validator($request->all())->validate();
 
                 $user->email = $request->email;
-                $user->email_verified_at = null;
-                $user->sendEmailVerificationNotification();
+                // $user->email_verified_at = null;
+                // $user->sendEmailVerificationNotification();
                 $user->save();
 
                 $session->flash('success', 'Din kontos e-post adresse ble oppdatert.');
-                $session->flash('info', 'Du må bekrefte din nye e-post. En lenke har blitt sendt til deg.');
+                // $session->flash('info', 'Du må bekrefte din nye e-post. En lenke har blitt sendt til deg.');
             } else {
                 $error = true;
                 $session->flash('error', 'Feil passord');
