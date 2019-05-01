@@ -110,11 +110,6 @@ img {
     }
 }
 
-#flash-messages {
-    background-color: red;
-    padding: 1em;
-}
-
 .bold {
     font-weight: 700;
 }
@@ -145,12 +140,21 @@ body > footer {
     }
 }
 
+dl dt {
+    font-weight: 700;
+}
+
+.hotel-description {
+    max-width: $size-l;
+}
+
 // Site wide
 @import "nav";
 @import "dropdown";
 @import "button";
 @import "form";
 @import "icon";
+@import "flash-message";
 
 // Booking spesific
 @import "booking-header";

@@ -1,0 +1,86 @@
+#flash-messages {
+    position: fixed;
+    top: 2em;
+    right: 2em;
+    width: 100%;
+    max-width: 32em;
+    list-style-type: none;
+    z-index: 11;
+
+    li {
+        display: block;
+        position: relative;
+
+        label {
+            cursor: pointer;
+            margin: 0 0 2em;
+            display: block;
+            padding: 2em 4em;
+            color: $white;
+            background-color: $black;
+            border: 1px solid $black;
+            border-radius: 3px;
+            box-shadow: 0 1em 1em -1em rgba(darken($blue-base, 50%), 0.33);
+
+            &:hover,
+            &:focus {
+                color: $black;
+                background-color: $white;
+            }
+        }
+
+        &.flash-message-success label {
+            border: none;
+            color: darken($green-base, 30%);
+            background-color: lighten($green-base, 30%);
+            box-shadow: 0 1em 1em -1em rgba($green-base, 0.33);
+
+            &:hover,
+            &:focus {
+                color: darken($green-base, 50%);
+                background-color: lighten($green-base, 10%);
+            }
+        }
+
+        &.flash-message-error label {
+            border: none;
+            color: darken($red-base, 30%);
+            background-color: lighten($red-base, 30%);
+            box-shadow: 0 1em 1em -1em rgba($red-base, 0.33);
+
+            &:hover,
+            &:focus {
+                color: darken($red-base, 50%);
+                background-color: lighten($red-base, 10%);
+            }
+        }
+
+        &.flash-message-info label {
+            border: none;
+            color: $shade-base;
+            background-color: $shade-lighter;
+            box-shadow: 0 1em 1em -1em rgba($shade-base, 0.33);
+
+            &:hover,
+            &:focus {
+                color: $shade-lighter;
+                background-color: $shade-base;
+            }
+        }
+
+        input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        input:checked {
+            display: none;
+
+            & + label {
+                display: none;
+            }
+        }
+    }
+}
