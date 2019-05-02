@@ -55,7 +55,7 @@ class User extends Authenticatable
     public function image()
     {
         return $this->hasOne('App\Image', 'id', 'image_id')->withDefault(function ($image) {
-            $image->url = '/images/default-user.svg';
+            $image->url = asset('/images/default-user.svg');
             $image->is_default = true;
         });
     }
