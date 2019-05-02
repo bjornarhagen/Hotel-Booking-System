@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->bigInteger('image_id')->unsigned()->nullable()->default(null);
             $table->foreign('image_id')->references('id')->on('images')->onDelete('set null');
-            $table->timestamp('email_verified_at')->nullable()->default(null);
+            // $table->timestamp('email_verified_at')->nullable()->default(null);
             $table->datetime('login_last')->nullable()->default(null);
             $table->rememberToken();
             $table->timestamps();
