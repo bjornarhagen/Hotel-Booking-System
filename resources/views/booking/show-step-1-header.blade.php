@@ -101,7 +101,7 @@
                     <div class="input input-select">
                         <select id="" name="people" required>
                             <option value="" selected disabled hidden>Antall personer</option>
-                            @for ($i = 1; $i <= 15; $i++) : }}
+                            @for ($i = 1; $i <= 15; $i++)
                                 @if (old('people', $people) == $i)
                                     <option value="{{ $i }}" selected>{{ $i }}</option>
                                 @else
