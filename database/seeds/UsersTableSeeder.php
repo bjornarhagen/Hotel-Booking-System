@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
         $user->name_last = 'User';
         $user->email = 'admin@example.com';
         $user->password = Hash::make('password');
-        $user->email_verified_at = Carbon::now();
+        // $user->email_verified_at = Carbon::now();
         $user->remember_token = Str::random(10);
         $user->save();
 
@@ -41,7 +41,7 @@ class UsersTableSeeder extends Seeder
         $user->name_last = 'Nordmann';
         $user->email = 'sensor';
         $user->password = Hash::make('sensor');
-        $user->email_verified_at = Carbon::now();
+        // $user->email_verified_at = Carbon::now();
         $user->remember_token = Str::random(10);
         $user->save();
 
