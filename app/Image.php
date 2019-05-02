@@ -2,6 +2,7 @@
 
 namespace App;
 
+use File;
 use Storage;
 use \Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -38,7 +39,10 @@ class Image extends Model
             $image->url = $image_url;
 
             // Save the image
-            Storage::put($image_url, $uploaded_file->get());
+            Storage::put($image_url, File::get($uploaded_file->path()));
+            
+            // In newer versions, use this:
+            // Storage::put($image_url, $uploaded_file->get());
             
             // Everything went well, let's put the image in the db
             $image->save();
