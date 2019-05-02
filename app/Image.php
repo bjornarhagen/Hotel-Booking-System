@@ -17,12 +17,13 @@ class Image extends Model
         return asset('storage/' . $value);
     }
 
-    public static function upload(User $user, $uploaded_file, String $path) : ? Image
+    public static function upload(User $user, $uploaded_file, String $path)
     {
         if ($uploaded_file === null) {
             return null;
         }
 
+        
         try {
             // Don't process files that are too large (10mb)...
             // This acts as a fallback. We should validate before sending it to this method
@@ -30,9 +31,9 @@ class Image extends Model
             if ($image_size_mb > 10) {
                 return null;
             }
-
+            
             $image_url = $path . '/' . str_random(20) . '.' . $uploaded_file->getClientOriginalExtension();
-
+            
             // Create image
             $image = new Image;
             $image->user_id = $user->id;
