@@ -42,7 +42,7 @@ class BookingUser extends Model
 
     public function getDaysAttribute()
     {
-        return $this->date_check_in->diffInDays($this->date_check_out);;
+        return $this->date_check_in->diffInDays($this->date_check_out);
     }
 
 }
