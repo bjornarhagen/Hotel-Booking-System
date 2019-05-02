@@ -1,6 +1,7 @@
 @extends('partials.master')
 
 @section('content')
+    <div class="padded-a">
     <header>
         <h1>{{ __('Edit :resource', ['resource' => __('booking')]) }}</h1>
     </header>
@@ -17,5 +18,6 @@
             </div>
         </form>
     </section>
+    </div>
     <link href="{{ asset('css/nice-forms.css') }}" rel="stylesheet">
 @endsection
