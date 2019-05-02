@@ -104,7 +104,7 @@ class Hotel extends Model
             $room_type_rooms = $room_type->availableRooms($date_check_in, $date_check_out);
 
             foreach($room_type_rooms as $room) {
-                $rooms->add($room);
+                $rooms->push($room); // Use add in newer Laravel version
             }
         }
 

@@ -21,7 +21,7 @@ class RoomType extends Model
 
         foreach ($this->rooms as $room) {
             if ($room->isAvailable($date_check_in, $date_check_out)) {
-                $rooms->add($room);
+                $rooms->push($room); // Use add in newer Laravel version
             }
         }
 
