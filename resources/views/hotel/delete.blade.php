@@ -7,8 +7,8 @@
         </header>
         <section>
             <form action="{{ route('admin.hotel.destroy', $hotel) }}" method="post" enctype="multipart/form-data">
-                @csrf
-                @method('delete')
+                {{ csrf_field() }}
+                {{ method_field('delete') }}
                 <div class="form-group">
                     <a href="{{ route('admin.hotel.index') }}">{{ __('No, cancel') }}</a>
                 </div>

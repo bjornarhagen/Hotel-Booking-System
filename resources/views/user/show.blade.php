@@ -7,7 +7,7 @@
 </div>
 
 <form class="padded-lr" action="{{ route('user.update') }}" method="post" enctype=multipart/form-data>
-    @csrf
+    {{ csrf_field() }}
 
     <fieldset>
         <legend>{{ __('User info') }}</legend>

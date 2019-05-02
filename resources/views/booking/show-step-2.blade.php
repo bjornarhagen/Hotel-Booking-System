@@ -3,7 +3,7 @@
 @section('content')
     @include('booking.nav')
     <form class="room_types" method="post" action="{{ route('hotel.booking.step-2', $hotel->slug) }}">
-        @csrf
+        {{ csrf_field() }}
         <header>
             <div class="inner-wrapper">
                 <h1>{{ __('Booking — Pick a room') }}</h1>

@@ -7,7 +7,7 @@
         </header>
         <section>
             <form action="{{ route('admin.hotel.store') }}" method="post" enctype="multipart/form-data">
-                @csrf
+                {{ csrf_field() }}
                 @include('hotel.form-fields')
                 <div class="form-group">
                     <button type="submit">{{ __('Save') }}</button>

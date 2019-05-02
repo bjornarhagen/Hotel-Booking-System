@@ -4,7 +4,7 @@
 <div class="padded-a">
     <h1>{{ __('Register') }}</h1>
     <form method="POST" action="{{ route('register') }}">
-        @csrf
+        {{ csrf_field() }}
 
         @include('auth.register-fields')
 

@@ -4,7 +4,7 @@
 <div class="padded-a">
     <h1>{{ __('Reset Password') }}</h1>
     <form method="POST" action="{{ route('password.update') }}">
-        @csrf
+        {{ csrf_field() }}
 
         <input type="hidden" name="token" value="{{ $token }}">
 

@@ -4,7 +4,7 @@
 <div class="padded-a">
     <h1>{{ __("Login") }}</h1>
     <form method="POST" action="{{ route('login') }}">
-        @csrf
+        {{ csrf_field() }}
 
         <div class="form-group">
             <label for="email">

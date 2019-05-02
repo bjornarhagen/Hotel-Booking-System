@@ -7,8 +7,8 @@
         </header>
         <section>
             <form action="{{ route('admin.hotel.update', $hotel) }}" method="post" enctype="multipart/form-data">
-                @csrf
-                @method('patch')
+                {{ csrf_field() }}
+                {{ method_field('patch') }}
                 @include('hotel.form-fields')
                 <div class="form-group">
                     <button type="submit">

@@ -7,8 +7,8 @@
         </header>
         <section>
             <form action="{{ route('admin.hotel.booking.destroy', [$hotel, $booking]) }}" method="post">
-                @csrf
-                @method('delete')
+                {{ csrf_field() }}
+                {{ method_field('delete') }}
                 <div class="form-group">
                     <a href="{{ route('admin.hotel.booking.index', $hotel) }}">{{ __('No, cancel') }}</a>
                 </div>

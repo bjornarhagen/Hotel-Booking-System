@@ -3,7 +3,7 @@
 @section('content')
     @include('booking.nav')
     <form method="post" action="{{ route('hotel.booking.step-4', $hotel->slug) }}">
-        @csrf
+        {{ csrf_field() }}
         <section class="people">
             @for ($i = 0; $i < $people_count; $i++)
                 <article class="person">
